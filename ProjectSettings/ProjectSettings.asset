@@ -135,7 +135,11 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: -1117554174214014212, guid: 31b1a29b4f629c24993301d042c49b92, type: 2}
+  - {fileID: 0}
+  - {fileID: -2333740092885017449, guid: 57d54a9a2a7ab33488e265f7f7b77107, type: 2}
+  - {fileID: -1984305035203333380, guid: f8fa19133a0aeb14090f19539e952a5b, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -611,11 +615,11 @@ PlayerSettings:
   m_MobileRenderingPath: 1
   metroPackageName: Template3D
   metroPackageVersion: 1.0.0.0
-  metroCertificatePath: 
+  metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
-  metroCertificateSubject: 
-  metroCertificateIssuer: 
-  metroCertificateNotAfter: 0000000000000000
+  metroCertificateSubject: DefaultCompany
+  metroCertificateIssuer: DefaultCompany
+  metroCertificateNotAfter: 0091c78de409d901
   metroApplicationDescription: Template_3D
   wsaImages: {}
   metroTileShortName: MR Object Interaction
@@ -632,10 +636,10 @@ PlayerSettings:
   metroSplashScreenUseBackgroundColor: 0
   platformCapabilities:
     WindowsStoreApps:
-      SpatialPerception: True
-      Microphone: True
       GazeInput: True
+      SpatialPerception: True
       InternetClient: True
+      Microphone: True
   metroTargetDeviceFamilies: {}
   metroFTAName: 
   metroFTAFileTypes: []
