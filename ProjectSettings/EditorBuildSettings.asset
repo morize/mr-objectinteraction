@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Badjasmoord/Scenes/CrimeScene.unity
+    guid: dccec82dbc36ca645865e7e5274a446d
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 31b1a29b4f629c24993301d042c49b92, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f8fa19133a0aeb14090f19539e952a5b, type: 2}

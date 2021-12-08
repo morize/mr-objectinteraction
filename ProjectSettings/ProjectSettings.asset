@@ -136,6 +136,8 @@ PlayerSettings:
     Others: 1
   bundleVersion: 0.1
   preloadedAssets:
+  - {fileID: -2333740092885017449, guid: 57d54a9a2a7ab33488e265f7f7b77107, type: 2}
+  - {fileID: -1984305035203333380, guid: f8fa19133a0aeb14090f19539e952a5b, type: 2}
   - {fileID: -1117554174214014212, guid: 31b1a29b4f629c24993301d042c49b92, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -590,7 +592,8 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    14: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}
