@@ -17,9 +17,9 @@ public class InteractableController : MonoBehaviour
     void Start()
     {
         gameObject.AddComponent<ConstraintManager>();
-        gameObject.GetComponent<BoxCollider>().enabled = false;
 
         boundsControl = gameObject.AddComponent<BoundsControl>();
+
         objectManipulator = gameObject.AddComponent<ObjectManipulator>();
         constraintManager = gameObject.AddComponent<ConstraintManager>();
         nearInteractionGrabbable = gameObject.AddComponent<NearInteractionGrabbable>();
@@ -27,7 +27,8 @@ public class InteractableController : MonoBehaviour
         boundsControl.enabled = false;
         boundsControl.BoxPadding = new Vector3(0.1f, 0.1f, 0.1f);
         boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-        
+        GetComponent<BoxCollider>().enabled = false;
+
         objectManipulator.enabled = false;
         constraintManager.enabled = false;
         nearInteractionGrabbable.enabled = false;
@@ -37,7 +38,7 @@ public class InteractableController : MonoBehaviour
     {
         if (!isInteractable)
         {
-            gameObject.GetComponent<BoxCollider>().enabled = true;
+            GetComponent<BoxCollider>().enabled = true;
             boundsControl.enabled = true;
             objectManipulator.enabled = true;
             constraintManager.enabled = true;
@@ -46,7 +47,7 @@ public class InteractableController : MonoBehaviour
 
         else
         {
-            gameObject.GetComponent<BoxCollider>().enabled = false;
+            GetComponent<BoxCollider>().enabled = false;
             boundsControl.enabled = false;
             objectManipulator.enabled = false;
             constraintManager.enabled = false;
