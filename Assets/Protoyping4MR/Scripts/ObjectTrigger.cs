@@ -50,7 +50,7 @@ public class ObjectTrigger : MonoBehaviour
         if (!boundsControl.enabled)
         {
             boundsControl.enabled = true;
-            objectMenu.transform.localPosition = new Vector3(gameObject.transform.localPosition.x + 0.1f, gameObject.transform.localPosition.y, gameObject.transform.localPosition.z + 0.1f);
+            
             objectMenu.SetActive(true);
             objectMenu.GetComponent<ObjectMenu>().SetEditableObject(gameObject);
         }
