@@ -19,11 +19,19 @@ public class ObjectTrigger : MonoBehaviour
 
     void Start()
     {
+        AddObjectInteractionComponents();
+        objectMenu = gameObject.transform.parent.Find("Object Edit Menu").gameObject;
+    }
+
+    // Add scripts that enables object selection.
+    // Add and temporary disable scripts that enables movement and boundingboxes.
+    private void AddObjectInteractionComponents()
+    {
         boxCollider = gameObject.AddComponent<BoxCollider>();
         constraintManager = gameObject.AddComponent<ConstraintManager>();
 
         interactable = gameObject.AddComponent<Interactable>();
-
+        interactable.OnClick.AddListener(OnObjectTriggered);
 
         boundsControl = gameObject.AddComponent<BoundsControl>();
         boundsControl.BoxPadding = new Vector3(0.02f, 0.02f, 0.02f);
@@ -33,22 +41,20 @@ public class ObjectTrigger : MonoBehaviour
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
         boundsControl.enabled = false;
 
-        nearInteractionGrabbable = gameObject.AddComponent<NearInteractionGrabbable>();
-        nearInteractionGrabbable.enabled = false;
-
         objectManipulator = gameObject.AddComponent<ObjectManipulator>();
         objectManipulator.enabled = false;
 
-        interactable.OnClick.AddListener(OnObjectTriggered);
-        
-        objectMenu = gameObject.transform.parent.Find("Object Edit Menu").gameObject;
+        nearInteractionGrabbable = gameObject.AddComponent<NearInteractionGrabbable>();
+        nearInteractionGrabbable.enabled = false;
     }
 
-
-    public void OnObjectTriggered()
+    // Enables boundingboxes around the object as visual feedback when the object is selected.
+    // Shows the editable object menu option in the user's POV.
+    private void OnObjectTriggered()
     {
         if (!boundsControl.enabled)
         {
+            boxCollider.enabled = false;
             boundsControl.enabled = true;
             
             objectMenu.SetActive(true);
@@ -56,14 +62,19 @@ public class ObjectTrigger : MonoBehaviour
         }
     }
 
+    // Fires when a new object is selected.
+    // Disables the previous selected object's boundingboxes to indicate deselection and it's boxcollider is reenabled for future selection.
     public void OnObjectFocusOff()
     {
         boundsControl.enabled = false;
+        boxCollider.enabled = true;
     }
 
+    // Fires when an edit mode button is pressed.
+    // Enables the right boundingbox edit functionality with the incoming edit mode string.
     public void SetEditMode(string mode)
     {
-        DisableObjectProperties();
+        DisableEditProperties();
 
         switch (mode)
         {
@@ -85,8 +96,10 @@ public class ObjectTrigger : MonoBehaviour
                 break;
         }
     }
-   
-    public void DisableObjectProperties()
+
+    // Fires everytime a new edit mode button is pressed or the edit object menu is hidden.
+    // Disables all boundingbox functionality except for the visual cue.
+    public void DisableEditProperties()
     {
         objectManipulator.enabled = false;
         nearInteractionGrabbable.enabled = false;

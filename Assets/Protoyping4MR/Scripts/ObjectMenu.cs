@@ -1,42 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI;
 
 public class ObjectMenu : MonoBehaviour
 {
-    GameObject buttonCollection;
-    GameObject activeObject;
+    GameObject selectedObject;
+    GameObject editButtonCollection;
+   
+    InteractableToggleCollection editButtonCollectionSettings;
+    Interactable showButton;
 
     void Start()
     {
-        buttonCollection = gameObject.transform.Find("ButtonCollection Hidden").gameObject;
+        editButtonCollection = gameObject.transform.Find("ButtonCollection Hidden").gameObject;
+        editButtonCollectionSettings= editButtonCollection.GetComponent<InteractableToggleCollection>();
+        showButton = gameObject.transform.GetChild(0).gameObject.GetComponent<Interactable>();
     }
 
-    public void ToggleButtonsVisibility()
+    // Saves an instance of the object when it is selected to be edited.
+    // If an object is already selected before a new object selection deselect it before replacement.
+    // Also hide the edit mode buttons and reset their values.
+    public void SetEditableObject(GameObject incomingObject)
     {
-        if (!buttonCollection.activeInHierarchy)
+        if (selectedObject)
         {
-            buttonCollection.SetActive(true);
+            showButton.IsToggled = false;
+            editButtonCollection.SetActive(false);
+            selectedObject.GetComponent<ObjectTrigger>().OnObjectFocusOff();
+        }
+        
+        selectedObject = incomingObject;
+    }
+
+    // Shows or hides the edit mode buttons and set its index back to 0 (first edit button).
+    // Reset the edit mode properties of the object's bounding box.
+    public void ToggleEditButtonsVisibility()
+    {
+        if (!editButtonCollection.activeInHierarchy)
+        {
+            editButtonCollection.SetActive(true);
+            editButtonCollectionSettings.CurrentIndex = 0;
         }
         else
         {
-            activeObject.GetComponent<ObjectTrigger>().DisableObjectProperties();
-            buttonCollection.SetActive(false);
+            selectedObject.GetComponent<ObjectTrigger>().DisableEditProperties();
+            editButtonCollection.SetActive(false);
         }
     }
 
-    public void OnEditButtonPress(string button)
+    // Sets the edit mode (movement, scale, rotation) to the selected object.
+    public void OnEditButtonPressed(string button)
     {
-        activeObject.GetComponent<ObjectTrigger>().SetEditMode(button);
-    }
-
-    public void SetEditableObject(GameObject editableObject)
-    {
-        activeObject = editableObject;
-    }
-
-    public GameObject GetEditableObject()
-    {
-        return activeObject;
+        selectedObject.GetComponent<ObjectTrigger>().SetEditMode(button);
     }
 }
