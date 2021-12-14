@@ -1,62 +1,12 @@
 fileFormatVersion: 2
-guid: 11956a82cfd01874f95da28eb54cd47c
+guid: 1f03ef12e63df9b4682aa425420fe005
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable:
   - first:
       74: 1827226128182048838
     second: Take 001
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 02 - Default
-    second: {fileID: 2100000, guid: ff679e7a74c795a4f901e023cb2dd57b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 08 - Default
-    second: {fileID: 2100000, guid: d8cc9d21d3b21f849a8454c73ca7faea, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 09 - Default
-    second: {fileID: 2100000, guid: 3f70aeaee0bd85f4f8d4a898e40b8ae5, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 13 - Default
-    second: {fileID: 2100000, guid: 0f9c79ecc55917a4591ff5871146dcb7, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 14 - Default
-    second: {fileID: 2100000, guid: 70e4df1d8fcb013428bc8bc4742a8c0f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: 19 - Default
-    second: {fileID: 2100000, guid: 1af08e603b629a24db38332c002dafd1, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Material #15
-    second: {fileID: 2100000, guid: 4f961602e9df9e54386df0bb3d25ba68, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wall_001
-    second: {fileID: 2100000, guid: b39301a9cf1cdb642a2c2ae83ecab69f, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wood_004
-    second: {fileID: 2100000, guid: cce69170a2e7bee4195e20ad2cee8b2b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wood_005
-    second: {fileID: 2100000, guid: cc5f083671811074f9ade0da18af8f7e, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -84,12 +34,12 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 1
+    addColliders: 0
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importVisibility: 1
