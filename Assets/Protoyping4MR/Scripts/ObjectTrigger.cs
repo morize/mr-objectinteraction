@@ -34,7 +34,7 @@ public class ObjectTrigger : MonoBehaviour
         interactable.OnClick.AddListener(OnObjectTriggered);
 
         boundsControl = gameObject.AddComponent<BoundsControl>();
-        boundsControl.BoxPadding = new Vector3(0.02f, 0.02f, 0.02f);
+        boundsControl.BoxPadding = new Vector3(0.01f, 0.01f, 0.01f);
         boundsControl.RotationHandlesConfig.ShowHandleForX = false;
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
@@ -66,6 +66,7 @@ public class ObjectTrigger : MonoBehaviour
     // Disables the previous selected object's boundingboxes to indicate deselection and it's boxcollider is reenabled for future selection.
     public void OnObjectFocusOff()
     {
+        objectManipulator.enabled = false;
         boundsControl.enabled = false;
         boxCollider.enabled = true;
     }
