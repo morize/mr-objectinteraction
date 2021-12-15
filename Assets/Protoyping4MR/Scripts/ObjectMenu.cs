@@ -5,17 +5,17 @@ using Microsoft.MixedReality.Toolkit.UI;
 
 public class ObjectMenu : MonoBehaviour
 {
-    GameObject selectedObject;
-    GameObject editButtonCollection;
-   
-    InteractableToggleCollection editButtonCollectionSettings;
+    InteractableToggleCollection objectMenuSettings;
     Interactable showButton;
+    GameObject hiddenButtons;
+    GameObject selectedObject;
+    
 
     void Start()
     {
-        editButtonCollection = gameObject.transform.Find("ButtonCollection Hidden").gameObject;
-        editButtonCollectionSettings= editButtonCollection.GetComponent<InteractableToggleCollection>();
-        showButton = gameObject.transform.GetChild(0).gameObject.GetComponent<Interactable>();
+        objectMenuSettings = gameObject.GetComponent<InteractableToggleCollection>();
+        showButton = gameObject.transform.Find("Object Button Show").gameObject.GetComponent<Interactable>();
+        hiddenButtons = showButton.transform.parent.Find("Object Hidden Buttons").gameObject;
     }
 
     // Saves an instance of the object when it is selected to be edited.
@@ -26,26 +26,30 @@ public class ObjectMenu : MonoBehaviour
         if (selectedObject)
         {
             showButton.IsToggled = false;
-            editButtonCollection.SetActive(false);
             selectedObject.GetComponent<ObjectTrigger>().OnObjectFocusOff();
+            objectMenuSettings.CurrentIndex = 0;
         }
-        
-        selectedObject = incomingObject;
+        else
+        {
+            gameObject.SetActive(true);
+            selectedObject = incomingObject;
+        }
     }
 
     // Shows or hides the edit mode buttons and set its index back to 0 (first edit button).
     // Reset the edit mode properties of the object's bounding box.
-    public void ToggleEditButtonsVisibility()
+    public void ToggleMoreButtonsVisibility()
     {
-        if (!editButtonCollection.activeInHierarchy)
+        if (!hiddenButtons.activeInHierarchy)
         {
-            editButtonCollection.SetActive(true);
-            editButtonCollectionSettings.CurrentIndex = 0;
+            hiddenButtons.SetActive(true);
+            objectMenuSettings.CurrentIndex = 0;
         }
         else
         {
             selectedObject.GetComponent<ObjectTrigger>().DisableEditProperties();
-            editButtonCollection.SetActive(false);
+            objectMenuSettings.CurrentIndex = 0;
+            hiddenButtons.SetActive(false);
         }
     }
 
@@ -53,5 +57,13 @@ public class ObjectMenu : MonoBehaviour
     public void OnEditButtonPressed(string button)
     {
         selectedObject.GetComponent<ObjectTrigger>().SetEditMode(button);
+    }
+
+    public void OnObjectDeleted()
+    {
+        hiddenButtons.SetActive(false);
+        selectedObject = null;
+        objectMenuSettings.CurrentIndex = 0;
+        gameObject.SetActive(false);
     }
 }

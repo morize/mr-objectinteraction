@@ -14,12 +14,12 @@ public class ObjectTrigger : MonoBehaviour
     SolverHandler solverHandler;
     TapToPlace tapToPlace;
 
-    GameObject objectMenu;
+    ObjectMenu objectMenu;
 
     void Start()
     {
         AddObjectInteractionComponents();
-        objectMenu = gameObject.transform.parent.Find("Object Edit Menu").gameObject;
+        objectMenu = gameObject.transform.parent.Find("Object Menu").GetComponent<ObjectMenu>();
     }
 
     // Add scripts that enables object selection.
@@ -46,7 +46,7 @@ public class ObjectTrigger : MonoBehaviour
         tapToPlace.UseDefaultSurfaceNormalOffset = false;
         tapToPlace.SurfaceNormalOffset = 0;
         tapToPlace.KeepOrientationVertical = true;
-        tapToPlace.MagneticSurfaces[0].value = -2147483648; // Spatial Awareness Layer
+        tapToPlace.MagneticSurfaces[0].value = -2147483648; // Spatial Awareness Layer Bit Value
         tapToPlace.enabled = false;
     }
     
@@ -56,11 +56,8 @@ public class ObjectTrigger : MonoBehaviour
     {
         if (!boundsControl.enabled)
         {
-            //boxCollider.enabled = false;
             boundsControl.enabled = true;
-            
-            objectMenu.SetActive(true);
-            objectMenu.GetComponent<ObjectMenu>().SetEditableObject(gameObject);
+            objectMenu.SetEditableObject(gameObject);
         }
     }
 
@@ -84,7 +81,6 @@ public class ObjectTrigger : MonoBehaviour
         {
             case "move":
                 tapToPlace.enabled = true;
-                tapToPlace.AutoStart = true;
                 solverHandler.enabled = true;
                 break;
 
@@ -95,6 +91,13 @@ public class ObjectTrigger : MonoBehaviour
             case "rotate":
                 boundsControl.RotationHandlesConfig.ShowHandleForX = true;
                 boundsControl.RotationHandlesConfig.ShowHandleForY = true;
+                break;
+
+            case "delete":
+                // Confirmation popup?
+                DisableEditProperties();
+                objectMenu.OnObjectDeleted();
+                Destroy(gameObject);
                 break;
 
             default:
