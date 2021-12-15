@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-using Microsoft.MixedReality.Toolkit.Input;
+using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 
 public class ObjectTrigger : MonoBehaviour
 {
-    BoxCollider boxCollider;
     ConstraintManager constraintManager;
     Interactable interactable;
 
     BoundsControl boundsControl;
-    ObjectManipulator objectManipulator;
-    NearInteractionGrabbable nearInteractionGrabbable;
+    SolverHandler solverHandler;
+    TapToPlace tapToPlace;
 
     GameObject objectMenu;
 
@@ -27,34 +26,37 @@ public class ObjectTrigger : MonoBehaviour
     // Add and temporary disable scripts that enables movement and boundingboxes.
     private void AddObjectInteractionComponents()
     {
-        boxCollider = gameObject.AddComponent<BoxCollider>();
         constraintManager = gameObject.AddComponent<ConstraintManager>();
 
         interactable = gameObject.AddComponent<Interactable>();
         interactable.OnClick.AddListener(OnObjectTriggered);
 
         boundsControl = gameObject.AddComponent<BoundsControl>();
-        boundsControl.BoxPadding = new Vector3(0.01f, 0.01f, 0.01f);
+        boundsControl.BoxPadding = new Vector3(0.05f, 0.05f, 0.05f);
         boundsControl.RotationHandlesConfig.ShowHandleForX = false;
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
         boundsControl.enabled = false;
 
-        objectManipulator = gameObject.AddComponent<ObjectManipulator>();
-        objectManipulator.enabled = false;
+        solverHandler = gameObject.AddComponent<SolverHandler>();
+        solverHandler.enabled = false;
 
-        nearInteractionGrabbable = gameObject.AddComponent<NearInteractionGrabbable>();
-        nearInteractionGrabbable.enabled = false;
+        tapToPlace = gameObject.AddComponent<TapToPlace>();
+        tapToPlace.UseDefaultSurfaceNormalOffset = false;
+        tapToPlace.SurfaceNormalOffset = 0;
+        tapToPlace.KeepOrientationVertical = true;
+        tapToPlace.MagneticSurfaces[0].value = -2147483648; // Spatial Awareness Layer
+        tapToPlace.enabled = false;
     }
-
+    
     // Enables boundingboxes around the object as visual feedback when the object is selected.
     // Shows the editable object menu option in the user's POV.
     private void OnObjectTriggered()
     {
         if (!boundsControl.enabled)
         {
-            boxCollider.enabled = false;
+            //boxCollider.enabled = false;
             boundsControl.enabled = true;
             
             objectMenu.SetActive(true);
@@ -66,9 +68,10 @@ public class ObjectTrigger : MonoBehaviour
     // Disables the previous selected object's boundingboxes to indicate deselection and it's boxcollider is reenabled for future selection.
     public void OnObjectFocusOff()
     {
-        objectManipulator.enabled = false;
+        solverHandler.enabled = false;
         boundsControl.enabled = false;
-        boxCollider.enabled = true;
+        tapToPlace.AutoStart = false;
+        tapToPlace.enabled = false;
     }
 
     // Fires when an edit mode button is pressed.
@@ -80,8 +83,9 @@ public class ObjectTrigger : MonoBehaviour
         switch (mode)
         {
             case "move":
-                objectManipulator.enabled = true;
-                nearInteractionGrabbable.enabled = true;
+                tapToPlace.enabled = true;
+                tapToPlace.AutoStart = true;
+                solverHandler.enabled = true;
                 break;
 
             case "scale":
@@ -102,8 +106,9 @@ public class ObjectTrigger : MonoBehaviour
     // Disables all boundingbox functionality except for the visual cue.
     public void DisableEditProperties()
     {
-        objectManipulator.enabled = false;
-        nearInteractionGrabbable.enabled = false;
+        solverHandler.enabled = false;
+        tapToPlace.AutoStart = false;
+        tapToPlace.enabled = false;
         boundsControl.RotationHandlesConfig.ShowHandleForX = false;
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
