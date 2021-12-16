@@ -46,10 +46,10 @@ public class ObjectTrigger : MonoBehaviour
         tapToPlace.UseDefaultSurfaceNormalOffset = false;
         tapToPlace.SurfaceNormalOffset = 0;
         tapToPlace.KeepOrientationVertical = true;
-        tapToPlace.MagneticSurfaces[0].value = -2147483648; // Spatial Awareness Layer Bit Value
+        tapToPlace.MagneticSurfaces[0].value = 8;
         tapToPlace.enabled = false;
     }
-    
+
     // Enables boundingboxes around the object as visual feedback when the object is selected.
     // Shows the editable object menu option in the user's POV.
     private void OnObjectTriggered()
