@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DepthBufferFormat: 0
-  UseSharedDepthBuffer: 0
+  UseSharedDepthBuffer: 1
 --- !u!114 &8395900585129657831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UsePrimaryWindowForDisplay: 1
-  HolographicRemoting: 1
+  HolographicRemoting: 0
 --- !u!114 &8920549895318614713
 MonoBehaviour:
   m_ObjectHideFlags: 0

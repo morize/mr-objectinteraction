@@ -28,6 +28,7 @@ public class ObjectMenu : MonoBehaviour
             showButton.IsToggled = false;
             selectedObject.GetComponent<ObjectTrigger>().OnObjectFocusOff();
             objectMenuSettings.CurrentIndex = 0;
+            selectedObject = incomingObject;
         }
         else
         {
