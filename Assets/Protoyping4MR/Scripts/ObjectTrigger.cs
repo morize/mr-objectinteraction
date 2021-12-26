@@ -19,7 +19,7 @@ public class ObjectTrigger : MonoBehaviour
     void Start()
     {
         AddObjectInteractionComponents();
-        objectMenu = gameObject.transform.parent.Find("Object Menu").GetComponent<ObjectMenu>();
+        objectMenu = gameObject.transform.parent.transform.parent.Find("Object Menu").GetComponent<ObjectMenu>();
     }
 
     // Add scripts that enables object selection.
