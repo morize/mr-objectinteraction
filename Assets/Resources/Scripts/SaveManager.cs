@@ -21,7 +21,7 @@ public class SavableObjectCollection
 
 public class SaveManager : MonoBehaviour
 {
-    string filename = "listOfObjects.json";
+    string fileName = "listOfObjects.json";
 
     void Start()
     {
@@ -48,59 +48,29 @@ public class SaveManager : MonoBehaviour
             savObject.rx = item.transform.localRotation.x;
             savObject.ry = item.transform.localRotation.y;
             savObject.rz = item.transform.localRotation.z;
+            savObject.rw = item.transform.localRotation.w;
 
             objectsToSave.savableObjectCollection.Add(savObject);
         }
 
         string serializedObjectData = JsonUtility.ToJson(objectsToSave);
 
-        WriteFile(GetPath(filename), serializedObjectData);
+        FileManager.StoreSerializedData(fileName, serializedObjectData);
     }
 
     public void LoadObjectData()
     {
-        SavableObjectCollection objectsToLoad = new SavableObjectCollection();
-        string serializedObjectData = ReadFile(GetPath(filename));
+        SavableObjectCollection objectsToLoad = FileManager.ReadSerializedData<SavableObjectCollection>(fileName);
 
-        if (string.IsNullOrEmpty(serializedObjectData) || serializedObjectData == "{}")
-        {
-            return;
-        }
-
-        objectsToLoad = JsonUtility.FromJson<SavableObjectCollection>(serializedObjectData);
-
-        foreach (SavableObject savableObject in objectsToLoad.savableObjectCollection)
-        {
-            // Instantiate with name and assign serialized data.
-            Debug.Log(savableObject.px);
-        }
-    }
-
-    private string GetPath (string filename)
-    {
-        return Application.persistentDataPath + "/" + filename;
-    }
-
-    private void WriteFile(string path, string content)
-    {
-        FileStream fileStream = new FileStream(path, FileMode.Create);
-
-        using (StreamWriter writer = new StreamWriter(fileStream))
-        {
-            writer.Write(content);
-        }
-    }
-
-    private string ReadFile(string path)
-    {
-        if (File.Exists(path))
-        {
-            using (StreamReader reader = new StreamReader(path))
+        foreach (SavableObject obj in objectsToLoad.savableObjectCollection)
+        {     
+            if(obj.name != "Floor")
             {
-                string content = reader.ReadToEnd();
-                return content;
-            }
+                Vector3 position = new Vector3(obj.px, obj.py, obj.pz);
+                Vector3 scale = new Vector3(obj.sx, obj.sy, obj.sz);
+                Quaternion rotation = new Quaternion(obj.rx, obj.ry, obj.rz, obj.rw);
+                InstantiateManager.InstatiateObjects(obj.name, gameObject.transform, position, scale, rotation);
+            }  
         }
-        return "";
     }
 }
