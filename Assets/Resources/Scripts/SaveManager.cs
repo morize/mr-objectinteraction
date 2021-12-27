@@ -71,6 +71,7 @@ public class SaveManager : MonoBehaviour
 
         foreach (SavableObject savableObject in objectsToLoad.savableObjectCollection)
         {
+            // Instantiate with name and assign serialized data.
             Debug.Log(savableObject.px);
         }
     }
