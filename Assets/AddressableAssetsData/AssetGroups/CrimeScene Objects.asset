@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: CrimeScene Objects
+  m_EditorClassIdentifier: 
+  m_GroupName: CrimeScene Objects
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9746944aef6a1d8478a7db9eeb7e0642
+  m_SerializeEntries:
+  - m_GUID: 0ab5edf35957464489b909e52eaa2254
+    m_Address: Assets/SceneReconstructor/Prefabs/Objects/Refrigerator.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 24d45740c342e9a49b0b439c8718a4e8
+    m_Address: Assets/SceneReconstructor/Prefabs/Objects/Closet.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ff934d3a44bf8724bb639922ccc9780e
+    m_Address: Assets/SceneReconstructor/Prefabs/Objects/Chair.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 2c6a420e57638bb4dac7f6468e90237e, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: f9707ebf3e8eb164fa98512e38d06bd4, type: 2}
+    - {fileID: 11400000, guid: 96fe9093647afec47acb25e4f405a64c, type: 2}

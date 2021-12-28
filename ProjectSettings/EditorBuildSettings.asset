@@ -6,9 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/CrimeScene.unity
+    path: Assets/SceneReconstructor/Scenes/CrimeScene.unity
     guid: dccec82dbc36ca645865e7e5274a446d
   m_configObjects:
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: 31b1a29b4f629c24993301d042c49b92, type: 2}
+    com.unity.addressableassets: {fileID: 11400000, guid: 51599b5f2481bef4db95f991bc5d38a3, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f8fa19133a0aeb14090f19539e952a5b, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 57d54a9a2a7ab33488e265f7f7b77107, type: 2}
