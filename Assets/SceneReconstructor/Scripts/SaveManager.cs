@@ -62,15 +62,18 @@ public class SaveManager : MonoBehaviour
     {
         SavableObjectCollection objectsToLoad = FileManager.ReadSerializedData<SavableObjectCollection>(fileName);
 
-        foreach (SavableObject obj in objectsToLoad.savableObjectCollection)
-        {     
-            if(obj.name != "Floor")
+        if (objectsToLoad != null)
+        {
+            foreach (SavableObject obj in objectsToLoad.savableObjectCollection)
             {
-                Vector3 position = new Vector3(obj.px, obj.py, obj.pz);
-                Vector3 scale = new Vector3(obj.sx, obj.sy, obj.sz);
-                Quaternion rotation = new Quaternion(obj.rx, obj.ry, obj.rz, obj.rw);
-                InstantiateManager.InstatiateObjects(obj.name, gameObject.transform, position, scale, rotation);
-            }  
+                if (obj.name != "Floor")
+                {
+                    Vector3 position = new Vector3(obj.px, obj.py, obj.pz);
+                    Vector3 scale = new Vector3(obj.sx, obj.sy, obj.sz);
+                    Quaternion rotation = new Quaternion(obj.rx, obj.ry, obj.rz, obj.rw);
+                    InstantiateManager.InstatiateObjects(obj.name, gameObject.transform, position, scale, rotation);
+                }
+            }
         }
     }
 }
