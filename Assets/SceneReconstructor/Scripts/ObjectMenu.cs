@@ -18,6 +18,14 @@ public class ObjectMenu : MonoBehaviour
         hiddenButtons = showButton.transform.parent.Find("Object Hidden Buttons").gameObject;
     }
 
+    void Update()
+    {
+        if (selectedObject && selectedObject.transform.localPosition.x != gameObject.transform.localPosition.x)
+        {
+            gameObject.transform.localPosition = selectedObject.transform.localPosition;
+        }
+    }
+
     // Saves an instance of the object when it is selected to be edited.
     // If an object is already selected before a new object selection deselect it before replacement.
     // Also hide the edit mode buttons and reset their values.
@@ -26,7 +34,7 @@ public class ObjectMenu : MonoBehaviour
         if (selectedObject)
         {
             showButton.IsToggled = false;
-            selectedObject.GetComponent<ObjectTrigger>().OnObjectFocusOff();
+            selectedObject.GetComponent<ObjectFeatures>().OnObjectFocusOff();
             objectMenuSettings.CurrentIndex = 0;
             selectedObject = incomingObject;
         }
@@ -48,7 +56,7 @@ public class ObjectMenu : MonoBehaviour
         }
         else
         {
-            selectedObject.GetComponent<ObjectTrigger>().DisableEditProperties();
+            selectedObject.GetComponent<ObjectFeatures>().DisableEditProperties();
             objectMenuSettings.CurrentIndex = 0;
             hiddenButtons.SetActive(false);
         }
@@ -57,7 +65,7 @@ public class ObjectMenu : MonoBehaviour
     // Sets the edit mode (movement, scale, rotation) to the selected object.
     public void OnEditButtonPressed(string button)
     {
-        selectedObject.GetComponent<ObjectTrigger>().SetEditMode(button);
+        selectedObject.GetComponent<ObjectFeatures>().SetEditMode(button);
     }
 
     public void OnObjectDeleted()

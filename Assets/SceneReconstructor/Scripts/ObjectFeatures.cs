@@ -5,7 +5,7 @@ using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 
-public class ObjectTrigger : MonoBehaviour
+public class ObjectFeatures : MonoBehaviour
 {
     ConstraintManager constraintManager;
     Interactable interactable;
@@ -47,6 +47,8 @@ public class ObjectTrigger : MonoBehaviour
         tapToPlace.SurfaceNormalOffset = 0;
         tapToPlace.KeepOrientationVertical = true;
         tapToPlace.MagneticSurfaces[0].value = 8;
+        tapToPlace.RotateAccordingToSurface = true;
+        tapToPlace.DebugEnabled = false;
         tapToPlace.enabled = false;
     }
 
