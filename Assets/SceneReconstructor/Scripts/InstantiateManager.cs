@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using System.Threading.Tasks;
+using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class InstantiateManager : MonoBehaviour
+public class InstantiateManager: MonoBehaviour
 {
     private static readonly string objectPath = "Assets/SceneReconstructor/Prefabs/Objects/";
+    public static IList<IResourceLocation> AssetLocations { get; } = new List<IResourceLocation>();
 
     public static void InstatiateObjects(string objectName, Transform parent)
     {
@@ -23,5 +26,34 @@ public class InstantiateManager : MonoBehaviour
             res.Result.transform.localScale = scale;
             res.Result.transform.rotation = rotation;
         };
+    }
+    
+    public static async Task GetAddressableObjects(IList<IResourceLocation> loadedLocations)
+    {
+        var unloadedLocations = await Addressables.LoadResourceLocationsAsync(objectPath).Task;
+
+
+        foreach (var location in unloadedLocations)
+        {
+            loadedLocations.Add(location);
+        }   
+    }
+    public static IEnumerator InitializeMapList(string label)
+    {
+        AsyncOperationHandle<IList<IResourceLocation>> locationsHandle = Addressables.LoadResourceLocationsAsync(label);
+        
+        yield return locationsHandle;
+        
+        if (locationsHandle.Result == null) yield break;
+      
+        
+        List<IResourceLocation> locations = new List<IResourceLocation>(locationsHandle.Result);
+
+        foreach (var location in locations)
+        {
+            Debug.Log(location.PrimaryKey);
+        }
+        
+        Addressables.Release(locationsHandle);
     }
 }

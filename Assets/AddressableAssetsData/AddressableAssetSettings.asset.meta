@@ -1,8 +1,10 @@
 fileFormatVersion: 2
 guid: 2c6a420e57638bb4dac7f6468e90237e
+labels:
+- Objects
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000
   userData: 
-  assetBundleName: 
+  assetBundleName: obj_chair
   assetBundleVariant: 

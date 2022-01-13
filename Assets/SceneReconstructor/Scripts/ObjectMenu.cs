@@ -43,6 +43,8 @@ public class ObjectMenu : MonoBehaviour
             gameObject.SetActive(true);
             selectedObject = incomingObject;
         }
+
+        gameObject.transform.localPosition = selectedObject.transform.localPosition;
     }
 
     // Shows or hides the edit mode buttons and set its index back to 0 (first edit button).
