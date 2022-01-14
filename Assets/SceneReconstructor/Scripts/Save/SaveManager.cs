@@ -21,7 +21,7 @@ public class SavableObjectCollection
 
 public class SaveManager : MonoBehaviour
 {
-    string fileName = "listOfObjects.json";
+    string fileName = "SavedCrimeScenes.json";
 
     void Start()
     {

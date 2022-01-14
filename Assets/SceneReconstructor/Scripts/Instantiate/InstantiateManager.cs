@@ -28,16 +28,6 @@ public class InstantiateManager: MonoBehaviour
         };
     }
     
-    public static async Task GetAddressableObjects(IList<IResourceLocation> loadedLocations)
-    {
-        var unloadedLocations = await Addressables.LoadResourceLocationsAsync(objectPath).Task;
-
-
-        foreach (var location in unloadedLocations)
-        {
-            loadedLocations.Add(location);
-        }   
-    }
     public static IEnumerator InitializeMapList(string label)
     {
         AsyncOperationHandle<IList<IResourceLocation>> locationsHandle = Addressables.LoadResourceLocationsAsync(label);
