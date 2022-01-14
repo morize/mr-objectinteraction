@@ -1,14 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.ResourceManagement.ResourceLocations;
+using System.Linq;
 
 public class InstantiateMenu : MonoBehaviour
 {
     [SerializeField]
-    Transform ObjectListGrid;
-    public IList<IResourceLocation> AssetLocations { get; } = new List<IResourceLocation>();
+    Transform objectListGrid;
+    
+    [SerializeField]
+    Transform crimeScene;
 
     void Start()
     {
@@ -17,11 +18,21 @@ public class InstantiateMenu : MonoBehaviour
 
     private void InstantiateListObjects()
     {
-        StartCoroutine(InstantiateManager.InitializeMapList("LoadableObjects"));
-
-        //InstantiateManager.InstatiateObjects(objectName, ObjectListGrid);
+        StartCoroutine(InstantiateManager.GetAddressableObjects((keys) => {
+        foreach (string key in keys)
+        {
+            string formattedKey = (key.Split('/').Last()).Split('.').First();
+            InstantiateManager.InstatiateMenuButtons(formattedKey, objectListGrid, crimeScene);
+        }
+        }));
     }
 
-   
-
+    public void OpenMenu()
+    {
+        
+        if (!gameObject.activeInHierarchy)
+        {
+            gameObject.SetActive(true);
+        }
+    }
 }

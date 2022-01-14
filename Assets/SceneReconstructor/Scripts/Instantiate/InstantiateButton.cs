@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro; 
+using TMPro;
+using Microsoft.MixedReality.Toolkit.UI;
+
 public class InstantiateButton : MonoBehaviour
 {
-    TextMeshProUGUI labelField;
-
-    void Start()
+    Transform crimeScene;
+    public void SetLabel(string objectName)
     {
-        labelField = gameObject.transform.Find("Label").GetComponent<TextMeshProUGUI>();
+        gameObject.transform.Find("Label").GetComponent<TextMeshProUGUI>().text = objectName;
     }
 
-    public void SetLabel(string label)
+    public void SetButtonEvent(string objectName, Transform parent)
     {
-        labelField.text = label;
+        Interactable interactable = gameObject.GetComponent<Interactable>();
+        interactable.OnClick.AddListener(delegate { InstantiateMenuObject(objectName, parent); });
+
+    }
+
+
+    public void InstantiateMenuObject(string objectName, Transform parent)
+    {
+        InstantiateManager.InstatiateObjects(objectName, parent);
     }
 }

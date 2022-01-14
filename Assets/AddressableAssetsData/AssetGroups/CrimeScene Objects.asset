@@ -22,18 +22,20 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - LoadableObjects
-    - Objects
   - m_GUID: 24d45740c342e9a49b0b439c8718a4e8
     m_Address: Assets/SceneReconstructor/Prefabs/Objects/Closet.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - Objects
     - LoadableObjects
   - m_GUID: ff934d3a44bf8724bb639922ccc9780e
     m_Address: Assets/SceneReconstructor/Prefabs/Objects/Chair.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - LoadableObjects
+  - m_GUID: cf84b76970dbdd342a8e909485942c0b
+    m_Address: Assets/SceneReconstructor/Prefabs/Utilities/ListObjectButton.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2c6a420e57638bb4dac7f6468e90237e, type: 2}
   m_SchemaSet:

@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
-using System.Threading.Tasks;
+using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class InstantiateManager: MonoBehaviour
+
+public static class InstantiateManager
 {
     private static readonly string objectPath = "Assets/SceneReconstructor/Prefabs/Objects/";
+    private static readonly string utilsPath = "Assets/SceneReconstructor/Prefabs/Utilities/";
     public static IList<IResourceLocation> AssetLocations { get; } = new List<IResourceLocation>();
 
     public static void InstatiateObjects(string objectName, Transform parent)
@@ -27,23 +29,41 @@ public class InstantiateManager: MonoBehaviour
             res.Result.transform.rotation = rotation;
         };
     }
-    
-    public static IEnumerator InitializeMapList(string label)
-    {
-        AsyncOperationHandle<IList<IResourceLocation>> locationsHandle = Addressables.LoadResourceLocationsAsync(label);
-        
-        yield return locationsHandle;
-        
-        if (locationsHandle.Result == null) yield break;
-      
-        
-        List<IResourceLocation> locations = new List<IResourceLocation>(locationsHandle.Result);
 
-        foreach (var location in locations)
+    public static void InstatiateMenuButtons(string objectName, Transform gridParent, Transform instantiateParent)
+    {
+        InstantiateButton buttonReference;
+
+        Addressables.InstantiateAsync(utilsPath + "ListObjectButton.prefab", gridParent).Completed += (res) => {
+            res.Result.name = "ListObjectButton " + objectName;
+            buttonReference = res.Result.GetComponent<InstantiateButton>();
+            buttonReference.SetLabel(objectName);
+            buttonReference.SetButtonEvent(objectName, instantiateParent);
+        };
+    }
+
+    public static IEnumerator GetAddressableObjects(System.Action<List<string>> callback)
+    {
+        List<string> keys = new List<string>();
+
+        AsyncOperationHandle<IList<IResourceLocation>> handle = Addressables.LoadResourceLocationsAsync("LoadableObjects");
+
+        yield return handle;
+
+        if (handle.Result == null) yield break;
+
+        foreach (var location in handle.Result)
         {
-            Debug.Log(location.PrimaryKey);
+            keys.Add(location.PrimaryKey);
         }
-        
-        Addressables.Release(locationsHandle);
+
+        callback(keys);
+
+        Addressables.Release(handle);
+    }
+
+    public static void ReleaseGameObject<TObject> (GameObject obj)
+    {
+        Addressables.ReleaseInstance(obj);
     }
 }
