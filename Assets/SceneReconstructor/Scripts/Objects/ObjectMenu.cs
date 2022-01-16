@@ -5,6 +5,9 @@ using Microsoft.MixedReality.Toolkit.UI;
 
 public class ObjectMenu : MonoBehaviour
 {
+    [SerializeField]
+    TracesManager tracesWindow;
+
     InteractableToggleCollection objectMenuSettings;
     Interactable showButton;
     GameObject hiddenButtons;
@@ -72,5 +75,16 @@ public class ObjectMenu : MonoBehaviour
     public void UpdateMenuPosition(Bounds objectBounds)
     {
         gameObject.transform.position = new Vector3(objectBounds.max.x, objectBounds.min.y + 0.2f, objectBounds.min.z + -0.14f);
+    }
+
+    public void OpenTracesWindow()
+    {
+        tracesWindow.OpenTracesWindow();
+    }
+
+    public void SetTraceInfo(string trace)
+    {
+        Trace newTrace = tracesWindow.SetTraceInfo(trace);
+        selectedObject.GetComponent<ObjectFeatures>().SetTraceInfo(newTrace);
     }
 }

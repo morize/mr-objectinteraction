@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
@@ -8,15 +7,15 @@ using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 public class ObjectFeatures : MonoBehaviour
 {
     Interactable interactable;
-
     BoundsControl boundsControl;
     SolverHandler solverHandler;
     TapToPlace tapToPlace;
 
     ObjectMenu objectMenu;
+    Trace traceInfo;
 
     Bounds objectBounds;
-
+   
     void Start()
     {
         AddObjectInteractionComponents();
@@ -99,13 +98,17 @@ public class ObjectFeatures : MonoBehaviour
                 boundsControl.RotationHandlesConfig.ShowHandleForZ = true;
                 break;
 
+            case "addTrace":
+                objectMenu.OpenTracesWindow();
+                break;
+
             case "delete":
-                // Confirmation popup?
+                // Confirmation popup
                 DisableEditProperties();
                 objectMenu.OnObjectDeleted();
                 InstantiateManager.ReleaseGameObject(gameObject);
                 break;
-
+            
             default:
                 break;
         }
@@ -135,5 +138,15 @@ public class ObjectFeatures : MonoBehaviour
         }
 
         objectMenu.UpdateMenuPosition(objectBounds);
+    }
+
+    public Trace GetTraceInfo()
+    {
+        return traceInfo;
+    }
+
+    public void SetTraceInfo(Trace newTrace)
+    {
+        traceInfo = newTrace;
     }
 }
