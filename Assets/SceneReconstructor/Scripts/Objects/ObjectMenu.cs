@@ -9,21 +9,12 @@ public class ObjectMenu : MonoBehaviour
     Interactable showButton;
     GameObject hiddenButtons;
     GameObject selectedObject;
-    
 
     void Start()
     {
         objectMenuSettings = gameObject.GetComponent<InteractableToggleCollection>();
         showButton = gameObject.transform.Find("Object Button Show").gameObject.GetComponent<Interactable>();
         hiddenButtons = showButton.transform.parent.Find("Object Hidden Buttons").gameObject;
-    }
-
-    void Update()
-    {
-        if (selectedObject && selectedObject.transform.localPosition.x != gameObject.transform.localPosition.x)
-        {
-            gameObject.transform.localPosition = selectedObject.transform.localPosition;
-        }
     }
 
     // Saves an instance of the object when it is selected to be edited.
@@ -44,7 +35,7 @@ public class ObjectMenu : MonoBehaviour
             selectedObject = incomingObject;
         }
 
-        gameObject.transform.localPosition = selectedObject.transform.localPosition;
+        UpdateMenuPosition(incomingObject.GetComponent<Renderer>().bounds);
     }
 
     // Shows or hides the edit mode buttons and set its index back to 0 (first edit button).
@@ -76,5 +67,10 @@ public class ObjectMenu : MonoBehaviour
         selectedObject = null;
         objectMenuSettings.CurrentIndex = 0;
         gameObject.SetActive(false);
+    }
+
+    public void UpdateMenuPosition(Bounds objectBounds)
+    {
+        gameObject.transform.position = new Vector3(objectBounds.max.x, objectBounds.min.y + 0.2f, objectBounds.min.z + -0.14f);
     }
 }

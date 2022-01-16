@@ -7,7 +7,6 @@ using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 
 public class ObjectFeatures : MonoBehaviour
 {
-    ConstraintManager constraintManager;
     Interactable interactable;
 
     BoundsControl boundsControl;
@@ -15,6 +14,8 @@ public class ObjectFeatures : MonoBehaviour
     TapToPlace tapToPlace;
 
     ObjectMenu objectMenu;
+
+    Bounds objectBounds;
 
     void Start()
     {
@@ -26,7 +27,7 @@ public class ObjectFeatures : MonoBehaviour
     // Add and temporary disable scripts that enables movement and boundingboxes.
     private void AddObjectInteractionComponents()
     {
-        constraintManager = gameObject.AddComponent<ConstraintManager>();
+        gameObject.AddComponent<ConstraintManager>();
 
         interactable = gameObject.AddComponent<Interactable>();
         interactable.OnClick.AddListener(OnObjectTriggered);
@@ -38,7 +39,8 @@ public class ObjectFeatures : MonoBehaviour
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
         boundsControl.enabled = false;
-
+        boundsControl.RotateStopped.AddListener(OnObjectPlaced);
+        
         solverHandler = gameObject.AddComponent<SolverHandler>();
         solverHandler.enabled = false;
 
@@ -50,6 +52,7 @@ public class ObjectFeatures : MonoBehaviour
         tapToPlace.RotateAccordingToSurface = true;
         tapToPlace.DebugEnabled = false;
         tapToPlace.enabled = false;
+        tapToPlace.OnPlacingStopped.AddListener(OnObjectPlaced);
     }
 
     // Enables boundingboxes around the object as visual feedback when the object is selected.
@@ -93,13 +96,14 @@ public class ObjectFeatures : MonoBehaviour
             case "rotate":
                 boundsControl.RotationHandlesConfig.ShowHandleForX = true;
                 boundsControl.RotationHandlesConfig.ShowHandleForY = true;
+                boundsControl.RotationHandlesConfig.ShowHandleForZ = true;
                 break;
 
             case "delete":
                 // Confirmation popup?
                 DisableEditProperties();
                 objectMenu.OnObjectDeleted();
-                Destroy(gameObject);
+                InstantiateManager.ReleaseGameObject(gameObject);
                 break;
 
             default:
@@ -118,5 +122,18 @@ public class ObjectFeatures : MonoBehaviour
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+    }
+
+    private void OnObjectPlaced()
+    {
+        objectBounds = gameObject.GetComponent<Renderer>().bounds;
+
+        if (gameObject.transform.localPosition.y - objectBounds.min.y > 0.001)
+        {
+            float fixedPositionY = gameObject.transform.localPosition.y + (-0.3875f - objectBounds.min.y/gameObject.transform.parent.localScale.y);
+            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, fixedPositionY, gameObject.transform.localPosition.z);
+        }
+
+        objectMenu.UpdateMenuPosition(objectBounds);
     }
 }

@@ -62,7 +62,7 @@ public static class InstantiateManager
         Addressables.Release(handle);
     }
 
-    public static void ReleaseGameObject<TObject> (GameObject obj)
+    public static void ReleaseGameObject (GameObject obj)
     {
         Addressables.ReleaseInstance(obj);
     }

@@ -21,7 +21,7 @@ public class SavableObjectCollection
 
 public class SaveManager : MonoBehaviour
 {
-    string fileName = "SavedCrimeScenes.json";
+    const string FILENAME = "SavedCrimeScenes.json";
 
     void Start()
     {
@@ -55,12 +55,12 @@ public class SaveManager : MonoBehaviour
 
         string serializedObjectData = JsonUtility.ToJson(objectsToSave);
 
-        FileManager.StoreSerializedData(fileName, serializedObjectData);
+        FileManager.StoreSerializedData(FILENAME, serializedObjectData);
     }
 
     public void LoadObjectData()
     {
-        SavableObjectCollection objectsToLoad = FileManager.ReadSerializedData<SavableObjectCollection>(fileName);
+        SavableObjectCollection objectsToLoad = FileManager.ReadSerializedData<SavableObjectCollection>(FILENAME);
 
         if (objectsToLoad != null)
         {
