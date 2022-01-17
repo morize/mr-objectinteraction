@@ -6,21 +6,21 @@ using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 
 public class ObjectFeatures : MonoBehaviour
 {
-    Interactable interactable;
-    BoundsControl boundsControl;
-    SolverHandler solverHandler;
-    TapToPlace tapToPlace;
+    private Interactable interactable;
+    private BoundsControl boundsControl;
+    private SolverHandler solverHandler;
+    private TapToPlace tapToPlace;
+    private Renderer objectRenderer;
 
-    ObjectMenu objectMenu;
-    Trace traceInfo;
-
-    Renderer objectRenderer;
+    private ObjectFeatures objectFeatures;
+    private ObjectMenu objectMenu;
+    private Trace traceInfo;
 
     void Start()
     {
+        objectFeatures = gameObject.GetComponent<ObjectFeatures>();
         objectMenu = gameObject.transform.parent.transform.parent.Find("ObjectEdit Menu").GetComponent<ObjectMenu>();
         objectRenderer = gameObject.GetComponent<Renderer>();
-
         AssignObjectInteractionComponents();
     }
 
@@ -37,8 +37,9 @@ public class ObjectFeatures : MonoBehaviour
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+        boundsControl.RotateStopped.AddListener(AdjustObjectPosition);
+        boundsControl.ScaleStopped.AddListener(AdjustObjectPosition);
         boundsControl.enabled = false;
-        boundsControl.RotateStopped.AddListener(OnObjectPlaced);
         
         solverHandler = gameObject.AddComponent<SolverHandler>();
         solverHandler.enabled = false;
@@ -50,32 +51,46 @@ public class ObjectFeatures : MonoBehaviour
         tapToPlace.MagneticSurfaces[0].value = 8;
         tapToPlace.RotateAccordingToSurface = true;
         tapToPlace.DebugEnabled = false;
+        tapToPlace.OnPlacingStopped.AddListener(AdjustObjectPosition);
         tapToPlace.enabled = false;
-        tapToPlace.OnPlacingStopped.AddListener(OnObjectPlaced);
     }
 
     private void OnObjectTriggered()
     {
         if (!boundsControl.enabled)
         {
-            OnObjectFocusOff();
             boundsControl.enabled = true;
-            objectMenu.OnObjectTriggered(gameObject.GetComponent<ObjectFeatures>());
+            objectMenu.OnObjectTriggered(objectFeatures);
         }
     }
 
-
-    public void OnObjectFocusOff()
+    private void ResetObjectInteractionProperties()
     {
         solverHandler.enabled = false;
-        boundsControl.enabled = false;
         tapToPlace.AutoStart = false;
         tapToPlace.enabled = false;
+        boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+        boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+        boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+        boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
     }
 
-    public void SetEditMode(string mode)
+    private void AdjustObjectPosition()
     {
-        DisableEditProperties();
+       Bounds bounds = objectRenderer.bounds;
+
+        if (gameObject.transform.localPosition.y - bounds.min.y > 0.001)
+        {
+            float fixedPositionY = gameObject.transform.localPosition.y + (-0.3875f - bounds.min.y/gameObject.transform.parent.localScale.y);
+            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, fixedPositionY, gameObject.transform.localPosition.z);
+        }
+
+        objectMenu.UpdateMenuPosition(bounds);
+    }
+
+    public void OnEditButtonPressed(string mode)
+    {
+        ResetObjectInteractionProperties();
 
         switch (mode)
         {
@@ -99,40 +114,21 @@ public class ObjectFeatures : MonoBehaviour
                 break;
 
             case "delete":
-                DisableEditProperties();
                 objectMenu.OnDeleteButtonPressed();
                 InstantiateManager.ReleaseGameObject(gameObject);
                 break;
-            
+
             default:
                 break;
         }
     }
 
-    // Fires everytime a new edit mode button is pressed or the edit object menu is hidden.
-    // Disables all boundingbox functionality except for the visual cue.
-    public void DisableEditProperties()
+    public void OnObjectFocusOff()
     {
         solverHandler.enabled = false;
+        boundsControl.enabled = false;
         tapToPlace.AutoStart = false;
         tapToPlace.enabled = false;
-        boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-        boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-        boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-        boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
-    }
-
-    private void OnObjectPlaced()
-    {
-       Bounds bounds = objectRenderer.bounds;
-
-        if (gameObject.transform.localPosition.y - bounds.min.y > 0.001)
-        {
-            float fixedPositionY = gameObject.transform.localPosition.y + (-0.3875f - bounds.min.y/gameObject.transform.parent.localScale.y);
-            gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, fixedPositionY, gameObject.transform.localPosition.z);
-        }
-
-        objectMenu.UpdateMenuPosition(bounds);
     }
 
     public Trace GetTraceInfo()

@@ -39,7 +39,7 @@ public class ObjectMenu : MonoBehaviour
 
     public void OnEditButtonPressed(string buttonMode)
     {
-        selectedObject.SetEditMode(buttonMode);
+        selectedObject.OnEditButtonPressed(buttonMode);
     }
 
     public void OnMoreButtonPressed()
@@ -51,7 +51,6 @@ public class ObjectMenu : MonoBehaviour
 
         else
         {
-            selectedObject.DisableEditProperties();
             hiddenButtons.SetActive(false);
         }
 
@@ -75,7 +74,7 @@ public class ObjectMenu : MonoBehaviour
         gameObject.transform.position = new Vector3(objectBounds.max.x, objectBounds.min.y + 0.2f, objectBounds.min.z + -0.14f);
     }
 
-    // Might not be necessary. Transfer to TracesController.
+    // Should not be in this script but in TracesManager. Stay for now...
     public void SetTraceInfo(string trace)
     {
         Trace newTrace = tracesWindow.SetTraceInfo(trace);
