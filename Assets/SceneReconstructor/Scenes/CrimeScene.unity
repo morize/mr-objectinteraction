@@ -30329,7 +30329,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 941899675}
         m_TargetAssemblyTypeName: InstantiateMenu, Assembly-CSharp
-        m_MethodName: OpenMenu
+        m_MethodName: OpenListObjectsMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

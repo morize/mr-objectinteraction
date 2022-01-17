@@ -104,7 +104,7 @@ public class SessionManager : MonoBehaviour
             Vector3 objScale = new Vector3(obj.sx, obj.sy, obj.sz);
             Quaternion objRotation = new Quaternion(obj.rx, obj.ry, obj.rz, obj.rw);
 
-            InstantiateManager.InstatiateObjects(obj.name, gameObject.transform, objPosition, objScale, objRotation);
+            InstantiateManager.InstatiateObject(obj.name, gameObject.transform, objPosition, objScale, objRotation);
         }
     }
 }

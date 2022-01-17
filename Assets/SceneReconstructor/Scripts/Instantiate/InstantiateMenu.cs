@@ -19,17 +19,16 @@ public class InstantiateMenu : MonoBehaviour
     private void InstantiateListObjects()
     {
         StartCoroutine(InstantiateManager.GetAddressableObjects((keys) => {
-        foreach (string key in keys)
-        {
-            string formattedKey = (key.Split('/').Last()).Split('.').First();
-            InstantiateManager.InstatiateMenuButtons(formattedKey, objectListGrid, crimeScene);
-        }
+            foreach (string key in keys)
+            {
+                string objectName = (key.Split('/').Last()).Split('.').First();
+                InstantiateManager.InstatiateMenuButton(objectName, objectListGrid, crimeScene);
+            }
         }));
     }
 
-    public void OpenMenu()
+    public void OpenListObjectsMenu()
     {
-        
         if (!gameObject.activeInHierarchy)
         {
             gameObject.SetActive(true);
