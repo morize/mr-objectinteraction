@@ -1,17 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using UnityEngine;
 
 public class FileManager : MonoBehaviour
 {
-    public static void StoreSerializedData(string fileName, string data)
+    public static void StoreJsonData(string fileName, string json)
     {
-        WriteFile(GetPath(fileName), data);
+        WriteFile(GetPath(fileName), json);
     }
 
-    public static T ReadSerializedData<T>(string fileName)
+    public static T ReadJsonData<T>(string fileName)
     {
         string content = ReadFile(GetPath(fileName));
         
