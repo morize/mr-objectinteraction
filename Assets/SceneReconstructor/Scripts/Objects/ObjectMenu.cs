@@ -84,22 +84,17 @@ public class ObjectMenu : MonoBehaviour
         if (!isEditable)
         {
             isEditable = true;
-
-            if (tracesMenu.isActiveAndEnabled)
-            {
-                tracesMenu.LoadTraceWindow(isEditable);
-                tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
-            }
+            tracesMenu.LoadTraceWindow(isEditable);
+            tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
         }
+
         else
         {
             isEditable = false;
-
-            if (!tracesMenu.isActiveAndEnabled)
-            {
-                selectedObject.OnObjectFocusOff();
-                OnDeleteButtonPressed();
-            }
+            tracesMenu.LoadTraceWindow(isEditable);
+            tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
+            selectedObject.OnObjectFocusOff();
+            OnDeleteButtonPressed();
         }
     }
 
