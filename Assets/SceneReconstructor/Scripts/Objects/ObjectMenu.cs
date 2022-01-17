@@ -6,70 +6,68 @@ using Microsoft.MixedReality.Toolkit.UI;
 public class ObjectMenu : MonoBehaviour
 {
     [SerializeField]
-    TracesManager tracesWindow;
+    private TracesManager tracesWindow;
 
-    InteractableToggleCollection objectMenuSettings;
-    Interactable showButton;
-    GameObject hiddenButtons;
-    GameObject selectedObject;
+    private InteractableToggleCollection objectMenu;
+    private ObjectFeatures selectedObject;
+    private GameObject hiddenButtons;
+    
 
     void Start()
     {
-        objectMenuSettings = gameObject.GetComponent<InteractableToggleCollection>();
-        showButton = gameObject.transform.Find("Object Button Show").gameObject.GetComponent<Interactable>();
-        hiddenButtons = showButton.transform.parent.Find("Object Hidden Buttons").gameObject;
+        objectMenu = gameObject.GetComponent<InteractableToggleCollection>();
+        hiddenButtons = gameObject.transform.Find("Object Hidden Buttons").gameObject;
     }
 
-    // Saves an instance of the object when it is selected to be edited.
-    // If an object is already selected before a new object selection deselect it before replacement.
-    // Also hide the edit mode buttons and reset their values.
-    public void SetEditableObject(GameObject incomingObject)
+    public void OnObjectTriggered(ObjectFeatures incomingObject)
     {
-        if (selectedObject)
-        {
-            showButton.IsToggled = false;
-            selectedObject.GetComponent<ObjectFeatures>().OnObjectFocusOff();
-            objectMenuSettings.CurrentIndex = 0;
-            selectedObject = incomingObject;
-        }
-        else
+        if (!gameObject.activeInHierarchy) 
         {
             gameObject.SetActive(true);
-            selectedObject = incomingObject;
         }
 
-        UpdateMenuPosition(incomingObject.GetComponent<Renderer>().bounds);
+        if (selectedObject)
+        {
+            selectedObject.OnObjectFocusOff();
+            objectMenu.CurrentIndex = 0;
+        }
+
+        selectedObject = incomingObject;
+
+        UpdateMenuPosition(incomingObject.GetBounds());
     }
 
-    // Shows or hides the edit mode buttons and set its index back to 0 (first edit button).
-    // Reset the edit mode properties of the object's bounding box.
-    public void ToggleMoreButtonsVisibility()
+    public void OnEditButtonPressed(string buttonMode)
+    {
+        selectedObject.SetEditMode(buttonMode);
+    }
+
+    public void OnMoreButtonPressed()
     {
         if (!hiddenButtons.activeInHierarchy)
         {
             hiddenButtons.SetActive(true);
-            objectMenuSettings.CurrentIndex = 0;
         }
+
         else
         {
-            selectedObject.GetComponent<ObjectFeatures>().DisableEditProperties();
-            objectMenuSettings.CurrentIndex = 0;
+            selectedObject.DisableEditProperties();
             hiddenButtons.SetActive(false);
         }
+
+        objectMenu.CurrentIndex = 0;
     }
 
-    // Sets the edit mode (movement, scale, rotation) to the selected object.
-    public void OnEditButtonPressed(string button)
+    public void OnDeleteButtonPressed()
     {
-        selectedObject.GetComponent<ObjectFeatures>().SetEditMode(button);
-    }
-
-    public void OnObjectDeleted()
-    {
-        hiddenButtons.SetActive(false);
-        selectedObject = null;
-        objectMenuSettings.CurrentIndex = 0;
+        objectMenu.CurrentIndex = 0;
+        selectedObject = default;
         gameObject.SetActive(false);
+    }
+
+    public void OnTracesInfoButtonPressed()
+    {
+        tracesWindow.OpenTracesWindow();
     }
 
     public void UpdateMenuPosition(Bounds objectBounds)
@@ -77,14 +75,10 @@ public class ObjectMenu : MonoBehaviour
         gameObject.transform.position = new Vector3(objectBounds.max.x, objectBounds.min.y + 0.2f, objectBounds.min.z + -0.14f);
     }
 
-    public void OpenTracesWindow()
-    {
-        tracesWindow.OpenTracesWindow();
-    }
-
+    // Might not be necessary. Transfer to TracesController.
     public void SetTraceInfo(string trace)
     {
         Trace newTrace = tracesWindow.SetTraceInfo(trace);
-        selectedObject.GetComponent<ObjectFeatures>().SetTraceInfo(newTrace);
+        selectedObject.SetTraceInfo(newTrace);
     }
 }

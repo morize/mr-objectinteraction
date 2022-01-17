@@ -14,17 +14,17 @@ public class ObjectFeatures : MonoBehaviour
     ObjectMenu objectMenu;
     Trace traceInfo;
 
-    Bounds objectBounds;
-   
+    Renderer objectRenderer;
+
     void Start()
     {
-        AddObjectInteractionComponents();
         objectMenu = gameObject.transform.parent.transform.parent.Find("ObjectEdit Menu").GetComponent<ObjectMenu>();
+        objectRenderer = gameObject.GetComponent<Renderer>();
+
+        AssignObjectInteractionComponents();
     }
 
-    // Add scripts that enables object selection.
-    // Add and temporary disable scripts that enables movement and boundingboxes.
-    private void AddObjectInteractionComponents()
+    private void AssignObjectInteractionComponents()
     {
         gameObject.AddComponent<ConstraintManager>();
 
@@ -54,19 +54,17 @@ public class ObjectFeatures : MonoBehaviour
         tapToPlace.OnPlacingStopped.AddListener(OnObjectPlaced);
     }
 
-    // Enables boundingboxes around the object as visual feedback when the object is selected.
-    // Shows the editable object menu option in the user's POV.
     private void OnObjectTriggered()
     {
         if (!boundsControl.enabled)
         {
+            OnObjectFocusOff();
             boundsControl.enabled = true;
-            objectMenu.SetEditableObject(gameObject);
+            objectMenu.OnObjectTriggered(gameObject.GetComponent<ObjectFeatures>());
         }
     }
 
-    // Fires when a new object is selected.
-    // Disables the previous selected object's boundingboxes to indicate deselection and it's boxcollider is reenabled for future selection.
+
     public void OnObjectFocusOff()
     {
         solverHandler.enabled = false;
@@ -75,8 +73,6 @@ public class ObjectFeatures : MonoBehaviour
         tapToPlace.enabled = false;
     }
 
-    // Fires when an edit mode button is pressed.
-    // Enables the right boundingbox edit functionality with the incoming edit mode string.
     public void SetEditMode(string mode)
     {
         DisableEditProperties();
@@ -99,13 +95,12 @@ public class ObjectFeatures : MonoBehaviour
                 break;
 
             case "addTrace":
-                objectMenu.OpenTracesWindow();
+                objectMenu.OnTracesInfoButtonPressed();
                 break;
 
             case "delete":
-                // Confirmation popup
                 DisableEditProperties();
-                objectMenu.OnObjectDeleted();
+                objectMenu.OnDeleteButtonPressed();
                 InstantiateManager.ReleaseGameObject(gameObject);
                 break;
             
@@ -129,15 +124,15 @@ public class ObjectFeatures : MonoBehaviour
 
     private void OnObjectPlaced()
     {
-        objectBounds = gameObject.GetComponent<Renderer>().bounds;
+       Bounds bounds = objectRenderer.bounds;
 
-        if (gameObject.transform.localPosition.y - objectBounds.min.y > 0.001)
+        if (gameObject.transform.localPosition.y - bounds.min.y > 0.001)
         {
-            float fixedPositionY = gameObject.transform.localPosition.y + (-0.3875f - objectBounds.min.y/gameObject.transform.parent.localScale.y);
+            float fixedPositionY = gameObject.transform.localPosition.y + (-0.3875f - bounds.min.y/gameObject.transform.parent.localScale.y);
             gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, fixedPositionY, gameObject.transform.localPosition.z);
         }
 
-        objectMenu.UpdateMenuPosition(objectBounds);
+        objectMenu.UpdateMenuPosition(bounds);
     }
 
     public Trace GetTraceInfo()
@@ -148,5 +143,10 @@ public class ObjectFeatures : MonoBehaviour
     public void SetTraceInfo(Trace newTrace)
     {
         traceInfo = newTrace;
+    }
+
+    public Bounds GetBounds()
+    {
+        return objectRenderer.bounds;
     }
 }

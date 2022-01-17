@@ -12658,7 +12658,7 @@ GameObject:
   - component: {fileID: 1711552318}
   - component: {fileID: 1711552317}
   m_Layer: 0
-  m_Name: Object Button Show
+  m_Name: Object Button More
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12864,7 +12864,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1812869994}
         m_TargetAssemblyTypeName: ObjectMenu, Assembly-CSharp
-        m_MethodName: ToggleMoreButtonsVisibility
+        m_MethodName: OnMoreButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24486,7 +24486,7 @@ GameObject:
   - component: {fileID: 6762591007919083631}
   - component: {fileID: 6762591007919083624}
   m_Layer: 0
-  m_Name: ButtonFour
+  m_Name: Button ToggleViewMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27128,7 +27128,7 @@ GameObject:
   - component: {fileID: 6762591008541725735}
   - component: {fileID: 6762591008541725728}
   m_Layer: 0
-  m_Name: ButtonOne
+  m_Name: Button Save
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28592,7 +28592,7 @@ GameObject:
   - component: {fileID: 6762591009044713883}
   - component: {fileID: 6762591009044713876}
   m_Layer: 0
-  m_Name: ButtonTwo
+  m_Name: Button Load
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29987,7 +29987,7 @@ GameObject:
   - component: {fileID: 6762591009367112029}
   - component: {fileID: 6762591009367112030}
   m_Layer: 0
-  m_Name: ButtonThree
+  m_Name: Button ShowObjectMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
