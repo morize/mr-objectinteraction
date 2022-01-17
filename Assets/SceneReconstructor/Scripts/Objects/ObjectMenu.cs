@@ -11,7 +11,8 @@ public class ObjectMenu : MonoBehaviour
     private InteractableToggleCollection objectMenu;
     private ObjectFeatures selectedObject;
     private GameObject hiddenButtons;
-    
+
+    private bool isEditable = true;
 
     void Start()
     {
@@ -28,6 +29,7 @@ public class ObjectMenu : MonoBehaviour
 
         if (selectedObject)
         {
+            tracesMenu.CloseTracesWindow();
             selectedObject.OnObjectFocusOff();
             objectMenu.CurrentIndex = 0;
         }
@@ -59,6 +61,8 @@ public class ObjectMenu : MonoBehaviour
 
     public void OnDeleteButtonPressed()
     {
+        if (tracesMenu.isActiveAndEnabled) tracesMenu.CloseTracesWindow();
+        
         objectMenu.CurrentIndex = 0;
         selectedObject = default;
         gameObject.SetActive(false);
@@ -66,12 +70,37 @@ public class ObjectMenu : MonoBehaviour
 
     public void OnTracesInfoButtonPressed()
     {
-        tracesMenu.OpenTracesWindow();
+        tracesMenu.LoadTraceWindow(isEditable);
+        tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
     }
 
     public void UpdateMenuPosition(Bounds objectBounds)
     {
         gameObject.transform.position = new Vector3(objectBounds.max.x, objectBounds.min.y + 0.2f, objectBounds.min.z + -0.14f);
+    }
+
+    public void ToggleEditMode()
+    {
+        if (!isEditable)
+        {
+            isEditable = true;
+
+            if (tracesMenu.isActiveAndEnabled)
+            {
+                tracesMenu.LoadTraceWindow(isEditable);
+                tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
+            }
+        }
+        else
+        {
+            isEditable = false;
+
+            if (!tracesMenu.isActiveAndEnabled)
+            {
+                selectedObject.OnObjectFocusOff();
+                OnDeleteButtonPressed();
+            }
+        }
     }
 
     // Should not be in this script but in TracesManager. Stay for now...

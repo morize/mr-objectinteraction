@@ -21,6 +21,7 @@ public class ObjectFeatures : MonoBehaviour
         objectFeatures = gameObject.GetComponent<ObjectFeatures>();
         objectMenu = gameObject.transform.parent.transform.parent.Find("ObjectEdit Menu").GetComponent<ObjectMenu>();
         objectRenderer = gameObject.GetComponent<Renderer>();
+
         AssignObjectInteractionComponents();
     }
 

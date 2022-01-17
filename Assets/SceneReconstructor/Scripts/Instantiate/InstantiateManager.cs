@@ -19,13 +19,14 @@ public static class InstantiateManager
         };
     }
 
-    public static void InstatiateObject(string objectName, Transform parent, Vector3 position, Vector3 scale, Quaternion rotation)
+    public static void InstatiateObject(string objectName, Transform parent, Vector3 position, Vector3 scale, Quaternion rotation, Trace trace)
     {
         Addressables.InstantiateAsync(objectPath + objectName + ".prefab", parent).Completed += (res) => {
             res.Result.name = objectName;
             res.Result.transform.position = position;
             res.Result.transform.localScale = scale;
             res.Result.transform.rotation = rotation;
+            res.Result.GetComponent<ObjectFeatures>().SetTraceInfo(trace);
         };
     }
 
