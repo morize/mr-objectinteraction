@@ -2,13 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TracesManager : MonoBehaviour
+public class TracesMenu : MonoBehaviour
 {
-    void Start()
-    {
-        
-    }
-
     public void OpenTracesWindow()
     {
         if (!gameObject.activeInHierarchy)
@@ -17,7 +12,7 @@ public class TracesManager : MonoBehaviour
         }
     }
 
-    // Set hardcoded traces data
+    // Hardcoded traces data
     public Trace SetTraceInfo(string trace)
     {
         Trace traceToSave = new Trace();

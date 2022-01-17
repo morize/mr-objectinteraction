@@ -6,7 +6,7 @@ using Microsoft.MixedReality.Toolkit.UI;
 public class ObjectMenu : MonoBehaviour
 {
     [SerializeField]
-    private TracesManager tracesWindow;
+    private TracesMenu tracesMenu;
 
     private InteractableToggleCollection objectMenu;
     private ObjectFeatures selectedObject;
@@ -66,7 +66,7 @@ public class ObjectMenu : MonoBehaviour
 
     public void OnTracesInfoButtonPressed()
     {
-        tracesWindow.OpenTracesWindow();
+        tracesMenu.OpenTracesWindow();
     }
 
     public void UpdateMenuPosition(Bounds objectBounds)
@@ -77,7 +77,7 @@ public class ObjectMenu : MonoBehaviour
     // Should not be in this script but in TracesManager. Stay for now...
     public void SetTraceInfo(string trace)
     {
-        Trace newTrace = tracesWindow.SetTraceInfo(trace);
+        Trace newTrace = tracesMenu.SetTraceInfo(trace);
         selectedObject.SetTraceInfo(newTrace);
     }
 }

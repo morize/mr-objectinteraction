@@ -13652,7 +13652,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbacb131851b6c244adcaf5b114c42bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tracesWindow: {fileID: 9151075289797482974}
+  tracesMenu: {fileID: 9151075289797482974}
 --- !u!1 &1817075860
 GameObject:
   m_ObjectHideFlags: 0
@@ -32867,7 +32867,7 @@ GameObject:
   - component: {fileID: 7954247137951051078}
   - component: {fileID: 9151075289797482974}
   m_Layer: 0
-  m_Name: TracesInformation Window
+  m_Name: TracesInformation Menu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
