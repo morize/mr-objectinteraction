@@ -58,10 +58,18 @@ public class ObjectFeatures : MonoBehaviour
 
     private void OnObjectTriggered()
     {
+        bool isEditable = objectMenu.GetIsEditable();
+
         if (!boundsControl.enabled)
         {
-            boundsControl.enabled = true;
+            if (isEditable) boundsControl.enabled = true;
+
             objectMenu.OnObjectTriggered(objectFeatures);
+
+            if (!isEditable)
+            {
+                objectMenu.OnTracesInfoButtonPressed();
+            }
         }
     }
 

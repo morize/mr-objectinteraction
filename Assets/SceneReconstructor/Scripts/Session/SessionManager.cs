@@ -48,9 +48,13 @@ public class SessionManager : MonoBehaviour
 
     public void LoadObjectDataFromJson()
     {
-        List<SavableObject> objectsToLoad = FileManager.ReadJsonData<SavableObjects>(SAVEFILE).savableObjects;
+        SavableObjects objectsToLoad = FileManager.ReadJsonData<SavableObjects>(SAVEFILE);
 
-        InstantiateCrimeSceneObjects(objectsToLoad);
+        if (objectsToLoad != null)
+        {
+            List<SavableObject> objects = objectsToLoad.savableObjects;
+            InstantiateCrimeSceneObjects(objects);
+        }
     }
 
     private SavableObjects GetCrimeSceneObjectData()

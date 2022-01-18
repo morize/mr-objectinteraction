@@ -96,31 +96,34 @@ public class TracesMenu : MonoBehaviour
 
     public void LoadTraceInfo(Trace selectedObjectTrace)
     {
-        if(selectedObjectTrace != null)
+        if (selectedObjectTrace != null)
         {
-            // Image should load from base54 string (adquired from database) and create a sprite with it. 
-            // For now the images are hard loaded in this script and referenced by id.
-            if (selectedObjectTrace.imageId == 1)
+            if (selectedObjectTrace.name != "")
             {
-                image.sprite = bloodTraceImg;
-            }
-            if (selectedObjectTrace.imageId == 2)
-            {
-                image.sprite = fingerprintsTraceImg;
-            }
-            if (selectedObjectTrace.imageId == 3)
-            {
-                image.sprite = drugsTraceImg;
-            }
+                // Image should load from base54 string (adquired from database) and create a sprite with it. 
+                // For now the images are hard loaded in this script and referenced by id.
+                if (selectedObjectTrace.imageId == 1)
+                {
+                    image.sprite = bloodTraceImg;
+                }
+                if (selectedObjectTrace.imageId == 2)
+                {
+                    image.sprite = fingerprintsTraceImg;
+                }
+                if (selectedObjectTrace.imageId == 3)
+                {
+                    image.sprite = drugsTraceImg;
+                }
 
-            image.preserveAspect = true;
+                image.preserveAspect = true;
 
-            title.text = selectedObjectTrace.name;
-            description.text = selectedObjectTrace.description;
-            extraInfo.text = "Type: " + selectedObjectTrace.type + "\n" +
-                "Condition: " + selectedObjectTrace.condition + "\n" +
-                "Date Collected " + selectedObjectTrace.dateCollected + "\n" +
-                "From Case " + selectedObjectTrace.fromCase;
+                title.text = selectedObjectTrace.name;
+                description.text = selectedObjectTrace.description;
+                extraInfo.text = "Type: " + selectedObjectTrace.type + "\n" +
+                    "Condition: " + selectedObjectTrace.condition + "\n" +
+                    "Date Collected " + selectedObjectTrace.dateCollected + "\n" +
+                    "From Case " + selectedObjectTrace.fromCase;
+            }
         }
     }
 }

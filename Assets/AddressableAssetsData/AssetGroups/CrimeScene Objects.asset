@@ -36,6 +36,11 @@ MonoBehaviour:
     m_Address: Assets/SceneReconstructor/Prefabs/Utilities/ListObjectButton.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: a452c0dfe810b7d41a6dcba2a9b82a7c
+    m_Address: Assets/SceneReconstructor/Prefabs/Objects/DrugsLab_v1.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - LoadableObjects
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 2c6a420e57638bb4dac7f6468e90237e, type: 2}
   m_SchemaSet:

@@ -22,21 +22,24 @@ public class ObjectMenu : MonoBehaviour
 
     public void OnObjectTriggered(ObjectFeatures incomingObject)
     {
-        if (!gameObject.activeInHierarchy) 
+        if (isEditable)
         {
-            gameObject.SetActive(true);
-        }
+            if (!gameObject.activeInHierarchy)
+            {
+                gameObject.SetActive(true);
+            }
 
-        if (selectedObject)
-        {
-            tracesMenu.CloseTracesWindow();
-            selectedObject.OnObjectFocusOff();
-            objectMenu.CurrentIndex = 0;
+            if (selectedObject)
+            {
+                tracesMenu.CloseTracesWindow();
+                selectedObject.OnObjectFocusOff();
+                objectMenu.CurrentIndex = 0;
+            }
+
+            UpdateMenuPosition(incomingObject.GetBounds());
         }
 
         selectedObject = incomingObject;
-
-        UpdateMenuPosition(incomingObject.GetBounds());
     }
 
     public void OnEditButtonPressed(string buttonMode)
@@ -63,7 +66,7 @@ public class ObjectMenu : MonoBehaviour
     {
         if (tracesMenu.isActiveAndEnabled) tracesMenu.CloseTracesWindow();
         
-        objectMenu.CurrentIndex = 0;
+        if(objectMenu) objectMenu.CurrentIndex = 0;
         selectedObject = default;
         gameObject.SetActive(false);
     }
@@ -72,6 +75,7 @@ public class ObjectMenu : MonoBehaviour
     {
         tracesMenu.LoadTraceWindow(isEditable);
         tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
+
     }
 
     public void UpdateMenuPosition(Bounds objectBounds)
@@ -84,17 +88,25 @@ public class ObjectMenu : MonoBehaviour
         if (!isEditable)
         {
             isEditable = true;
-            tracesMenu.LoadTraceWindow(isEditable);
-            tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
+
+            if (selectedObject)
+            {
+                tracesMenu.LoadTraceWindow(isEditable);
+                tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
+            }
         }
 
         else
         {
             isEditable = false;
-            tracesMenu.LoadTraceWindow(isEditable);
-            tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
-            selectedObject.OnObjectFocusOff();
-            OnDeleteButtonPressed();
+
+            if (selectedObject)
+            {
+                tracesMenu.LoadTraceWindow(isEditable);
+                tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
+                selectedObject.OnObjectFocusOff();
+                OnDeleteButtonPressed();
+            }
         }
     }
 
@@ -103,5 +115,10 @@ public class ObjectMenu : MonoBehaviour
     {
         Trace newTrace = tracesMenu.SetTraceInfo(trace);
         selectedObject.SetTraceInfo(newTrace);
+    }
+
+    public bool GetIsEditable()
+    {
+        return isEditable;
     }
 }
