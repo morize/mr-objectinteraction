@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using Microsoft.MixedReality.Toolkit.UI;
 
 [Serializable]
 public class Trace
@@ -32,23 +34,62 @@ public class SavableObjects
 
 public class SessionManager : MonoBehaviour
 {
-    const string SAVEFILE = "SavedCrimeScenes.json";
+    public static Renderer floorRenderer;
+
+    private string saveFile = "SavedCrimeScenes.json";
+    private BoundsControl boundsControl;
+    private ObjectManipulator objectManipulator;
 
     void Start()
     {
+        floorRenderer = transform.Find("Floor").GetComponent<Renderer>();
+
+        AssignMrtkComponents();
         LoadObjectDataFromJson();
+    }
+
+    private void AssignMrtkComponents()
+    {
+        gameObject.AddComponent<ConstraintManager>();
+        boundsControl = gameObject.AddComponent<BoundsControl>();
+        boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+        boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+        boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+        boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+        boundsControl.enabled = false;
+
+        objectManipulator = gameObject.AddComponent<ObjectManipulator>();
+        objectManipulator.enabled = false;
+    }
+
+    public void ToggleSceneMovement()
+    {
+        if (!boundsControl.isActiveAndEnabled)
+        {
+            boundsControl.ScaleHandlesConfig.ShowScaleHandles = true;
+            boundsControl.enabled = true;
+
+            objectManipulator.enabled = true;
+        }
+        else
+        {
+            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+            boundsControl.enabled = false;
+
+            objectManipulator.enabled = false;
+        }
     }
 
     public void SaveObjectDataInJson()
     {
         string jsonObjectData = JsonUtility.ToJson(GetCrimeSceneObjectData());
 
-        FileManager.StoreJsonData(SAVEFILE, jsonObjectData);
+        FileManager.StoreJsonData(saveFile, jsonObjectData);
     }
 
     public void LoadObjectDataFromJson()
     {
-        SavableObjects objectsToLoad = FileManager.ReadJsonData<SavableObjects>(SAVEFILE);
+        SavableObjects objectsToLoad = FileManager.ReadJsonData<SavableObjects>(saveFile);
 
         if (objectsToLoad != null)
         {
@@ -63,7 +104,7 @@ public class SessionManager : MonoBehaviour
 
         foreach (Transform item in transform)
         {
-            if (item.name == "Floor")
+            if (item.name == "Floor" | item.name == "rigRoot")
             {
                 continue;
             }
@@ -71,9 +112,9 @@ public class SessionManager : MonoBehaviour
             SavableObject savableObject = new SavableObject();
 
             savableObject.name = item.name;
-            savableObject.px = item.position.x;
-            savableObject.py = item.position.y;
-            savableObject.pz = item.position.z;
+            savableObject.px = item.localPosition.x;
+            savableObject.py = item.localPosition.y;
+            savableObject.pz = item.localPosition.z;
             savableObject.sx = item.localScale.x;
             savableObject.sy = item.localScale.y;
             savableObject.sz = item.localScale.z;
@@ -84,7 +125,7 @@ public class SessionManager : MonoBehaviour
 
             Trace itemTrace = item.gameObject.GetComponent<ObjectFeatures>().GetTraceInfo();
 
-            if (itemTrace.name != "")
+            if (itemTrace != null)
             {
                 savableObject.trace = itemTrace;
             }

@@ -80,7 +80,7 @@ public class ObjectFeatures : MonoBehaviour
     private void CheckIfObjectExceedesFloor()
     {
         float minObjectPositionY = objectRenderer.bounds.min.y;
-        float maxFloorPositionY = -0.6875f;
+        float maxFloorPositionY = SessionManager.floorRenderer.bounds.max.y;
 
         if (gameObject.transform.localPosition.y - minObjectPositionY > 0.001)
         {

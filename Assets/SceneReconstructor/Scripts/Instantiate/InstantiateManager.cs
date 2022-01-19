@@ -23,9 +23,9 @@ public static class InstantiateManager
     {
         Addressables.InstantiateAsync(objectPath + objectName + ".prefab", parent).Completed += (res) => {
             res.Result.name = objectName;
-            res.Result.transform.position = position;
+            res.Result.transform.localPosition = position;
             res.Result.transform.localScale = scale;
-            res.Result.transform.rotation = rotation;
+            res.Result.transform.localRotation = rotation;
             res.Result.GetComponent<ObjectFeatures>().SetTraceInfo(trace);
         };
     }
