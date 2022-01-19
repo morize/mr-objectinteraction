@@ -12,7 +12,7 @@ public class ObjectMenu : MonoBehaviour
     private ObjectFeatures selectedObject;
     private GameObject hiddenButtons;
 
-    private bool isEditModeEnabled = true;
+    public bool isEditModeEnabled = true;
 
     void Start()
     {
@@ -37,46 +37,39 @@ public class ObjectMenu : MonoBehaviour
 
         else
         {
-            OnTracesInfoButtonPressed();
+            tracesMenu.LoadTrace(isEditModeEnabled, incomingObject.GetTraceInfo());
         }
 
         selectedObject = incomingObject;
     }
 
-    public void OnEditButtonPressed(string buttonMode)
+    public void OnEditButtonPressed(string editMode)
     {
-        selectedObject.OnEditButtonPressed(buttonMode);
+        selectedObject.OnEditButtonPressed(editMode);
     }
 
     public void OnMoreButtonPressed()
     {
-        if (!hiddenButtons.activeInHierarchy)
-        {
-            hiddenButtons.SetActive(true);
-        }
-
-        else
-        {
-            hiddenButtons.SetActive(false);
-        }
+        if (!hiddenButtons.activeInHierarchy) hiddenButtons.SetActive(true);
+        else hiddenButtons.SetActive(false);
 
         objectMenu.CurrentIndex = 0;
+    }
+
+    public void OnTracesInfoButtonPressed()
+    {
+        tracesMenu.LoadTrace(isEditModeEnabled, selectedObject.GetTraceInfo());
     }
 
     public void OnDeleteButtonPressed()
     {
         if (tracesMenu.isActiveAndEnabled) tracesMenu.CloseTracesWindow();
+
+        InstantiateManager.ReleaseGameObject(selectedObject.gameObject);
+        selectedObject = null;
         
-        if(objectMenu) objectMenu.CurrentIndex = 0;
-        selectedObject = default;
+        objectMenu.CurrentIndex = 0;
         gameObject.SetActive(false);
-    }
-
-    public void OnTracesInfoButtonPressed()
-    {
-        tracesMenu.LoadTraceWindow(isEditModeEnabled);
-        tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
-
     }
 
     public void AlignMenuWithObject(Bounds objectBounds)
@@ -84,42 +77,34 @@ public class ObjectMenu : MonoBehaviour
         gameObject.transform.position = new Vector3(objectBounds.max.x, objectBounds.min.y + 0.2f, objectBounds.min.z + -0.14f);
     }
 
+    private void ResetEnvironment()
+    {
+        if (objectMenu)
+        {
+            if (objectMenu.isActiveAndEnabled) objectMenu.CurrentIndex = 0;
+        }
+
+        if (selectedObject)
+        {
+            selectedObject.OnObjectFocusOff();
+            selectedObject = null;
+        }
+
+        if (tracesMenu.isActiveAndEnabled) tracesMenu.CloseTracesWindow();
+
+        gameObject.SetActive(false);
+    }
+
     public void ToggleEditMode()
     {
-        if (!isEditModeEnabled)
-        {
-            isEditModeEnabled = true;
+        ResetEnvironment();
 
-            if (selectedObject)
-            {
-                tracesMenu.LoadTraceWindow(isEditModeEnabled);
-                tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
-            }
-        }
-
-        else
-        {
-            isEditModeEnabled = false;
-
-            if (selectedObject)
-            {
-                tracesMenu.LoadTraceWindow(isEditModeEnabled);
-                tracesMenu.LoadTraceInfo(selectedObject.GetTraceInfo());
-                selectedObject.OnObjectFocusOff();
-                OnDeleteButtonPressed();
-            }
-        }
+        isEditModeEnabled = !isEditModeEnabled;
     }
 
-    // Should not be in this script but in TracesManager. Stay for now...
-    public void SetTraceInfo(string trace)
+    public void SetTraceToSelectedObject(string trace)
     {
-        Trace newTrace = tracesMenu.SetTraceInfo(trace);
+        Trace newTrace = tracesMenu.GenerateTraceInfo(trace);
         selectedObject.SetTraceInfo(newTrace);
-    }
-
-    public bool GetIsEditModeEnabled()
-    {
-        return isEditModeEnabled;
     }
 }

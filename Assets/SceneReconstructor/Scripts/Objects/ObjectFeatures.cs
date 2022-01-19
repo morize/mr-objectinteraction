@@ -57,7 +57,7 @@ public class ObjectFeatures : MonoBehaviour
 
     private void OnObjectTriggered()
     {
-        if (objectMenu.GetIsEditModeEnabled() && !boundsControl.enabled)
+        if (objectMenu.isEditModeEnabled && !boundsControl.enabled)
         {
             boundsControl.enabled = true;
             objectMenu.AlignMenuWithObject(objectRenderer.bounds);
@@ -66,7 +66,7 @@ public class ObjectFeatures : MonoBehaviour
         objectMenu.OnObjectTriggered(objectFeatures);
     }
 
-    private void DisableMrtkInteractionProperties()
+    private void DisableMrtkInteractionComponents()
     {
         solverHandler.enabled = false;
         tapToPlace.AutoStart = false;
@@ -93,7 +93,7 @@ public class ObjectFeatures : MonoBehaviour
 
     public void OnEditButtonPressed(string editMode)
     {
-        DisableMrtkInteractionProperties();
+        DisableMrtkInteractionComponents();
 
         switch (editMode)
         {
@@ -112,15 +112,6 @@ public class ObjectFeatures : MonoBehaviour
                 boundsControl.RotationHandlesConfig.ShowHandleForZ = true;
                 break;
 
-            case "addTrace":
-                objectMenu.OnTracesInfoButtonPressed();
-                break;
-
-            case "delete":
-                objectMenu.OnDeleteButtonPressed();
-                InstantiateManager.ReleaseGameObject(gameObject);
-                break;
-
             default:
                 break;
         }
@@ -128,10 +119,9 @@ public class ObjectFeatures : MonoBehaviour
 
     public void OnObjectFocusOff()
     {
-        solverHandler.enabled = false;
+        DisableMrtkInteractionComponents();
+
         boundsControl.enabled = false;
-        tapToPlace.AutoStart = false;
-        tapToPlace.enabled = false;
     }
 
     public Trace GetTraceInfo()
