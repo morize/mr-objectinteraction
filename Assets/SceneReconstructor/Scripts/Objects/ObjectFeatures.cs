@@ -6,11 +6,11 @@ using Microsoft.MixedReality.Toolkit.Utilities.Solvers;
 
 public class ObjectFeatures : MonoBehaviour
 {
+    private Renderer objectRenderer;
     private Interactable interactable;
     private BoundsControl boundsControl;
     private SolverHandler solverHandler;
     private TapToPlace tapToPlace;
-    private Renderer objectRenderer;
 
     private ObjectFeatures objectFeatures;
     private ObjectMenu objectMenu;
@@ -22,10 +22,9 @@ public class ObjectFeatures : MonoBehaviour
         objectMenu = gameObject.transform.parent.transform.parent.Find("ObjectEdit Menu").GetComponent<ObjectMenu>();
         objectRenderer = gameObject.GetComponent<Renderer>();
 
-        AssignObjectInteractionComponents();
+        AssignMrtkInteractionComponents();
     }
-
-    private void AssignObjectInteractionComponents()
+    private void AssignMrtkInteractionComponents()
     {
         gameObject.AddComponent<ConstraintManager>();
 
@@ -38,8 +37,8 @@ public class ObjectFeatures : MonoBehaviour
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
-        boundsControl.RotateStopped.AddListener(AdjustObjectPosition);
-        boundsControl.ScaleStopped.AddListener(AdjustObjectPosition);
+        boundsControl.RotateStopped.AddListener(CheckIfObjectExceedesFloor);
+        boundsControl.ScaleStopped.AddListener(CheckIfObjectExceedesFloor);
         boundsControl.enabled = false;
         
         solverHandler = gameObject.AddComponent<SolverHandler>();
@@ -52,28 +51,22 @@ public class ObjectFeatures : MonoBehaviour
         tapToPlace.MagneticSurfaces[0].value = 8;
         tapToPlace.RotateAccordingToSurface = true;
         tapToPlace.DebugEnabled = false;
-        tapToPlace.OnPlacingStopped.AddListener(AdjustObjectPosition);
+        tapToPlace.OnPlacingStopped.AddListener(CheckIfObjectExceedesFloor);
         tapToPlace.enabled = false;
     }
 
     private void OnObjectTriggered()
     {
-        bool isEditable = objectMenu.GetIsEditable();
-
-        if (!boundsControl.enabled)
+        if (objectMenu.GetIsEditModeEnabled() && !boundsControl.enabled)
         {
-            if (isEditable) boundsControl.enabled = true;
-
-            objectMenu.OnObjectTriggered(objectFeatures);
-
-            if (!isEditable)
-            {
-                objectMenu.OnTracesInfoButtonPressed();
-            }
+            boundsControl.enabled = true;
+            objectMenu.AlignMenuWithObject(objectRenderer.bounds);
         }
+
+        objectMenu.OnObjectTriggered(objectFeatures);
     }
 
-    private void ResetObjectInteractionProperties()
+    private void DisableMrtkInteractionProperties()
     {
         solverHandler.enabled = false;
         tapToPlace.AutoStart = false;
@@ -84,24 +77,25 @@ public class ObjectFeatures : MonoBehaviour
         boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
     }
 
-    private void AdjustObjectPosition()
+    private void CheckIfObjectExceedesFloor()
     {
-       Bounds bounds = objectRenderer.bounds;
+        float minObjectPositionY = objectRenderer.bounds.min.y;
+        float maxFloorPositionY = -0.6875f;
 
-        if (gameObject.transform.localPosition.y - bounds.min.y > 0.001)
+        if (gameObject.transform.localPosition.y - minObjectPositionY > 0.001)
         {
-            float fixedPositionY = gameObject.transform.localPosition.y + (-0.3875f - bounds.min.y/gameObject.transform.parent.localScale.y);
+            float fixedPositionY = gameObject.transform.localPosition.y + (maxFloorPositionY - minObjectPositionY / gameObject.transform.parent.localScale.y);
             gameObject.transform.localPosition = new Vector3(gameObject.transform.localPosition.x, fixedPositionY, gameObject.transform.localPosition.z);
         }
 
-        objectMenu.UpdateMenuPosition(bounds);
+        objectMenu.AlignMenuWithObject(objectRenderer.bounds);
     }
 
-    public void OnEditButtonPressed(string mode)
+    public void OnEditButtonPressed(string editMode)
     {
-        ResetObjectInteractionProperties();
+        DisableMrtkInteractionProperties();
 
-        switch (mode)
+        switch (editMode)
         {
             case "move":
                 tapToPlace.enabled = true;
