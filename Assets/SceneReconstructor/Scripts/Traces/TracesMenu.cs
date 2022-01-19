@@ -21,62 +21,49 @@ public class TracesMenu : MonoBehaviour
 
     public void LoadTrace(bool isEditModeEnabled, Trace trace)
     {
-        LoadTraceWindow(isEditModeEnabled);
-
-        if (trace != null)
+        if (isEditModeEnabled && !gameObject.activeInHierarchy)
         {
-            LoadTraceInfo(trace);
-        }
-    }
-
-    private void LoadTraceWindow(bool isEditModeEnabled)
-    {
-        if (!gameObject.activeInHierarchy) gameObject.SetActive(true);
-        
-
-        if (isEditModeEnabled)
-        {
+            gameObject.SetActive(true);
             viewmodeContent.SetActive(false);
             editmodeContent.SetActive(true);
         }
 
-        else
+        if(!isEditModeEnabled && trace.name != "")
         {
+            gameObject.SetActive(true);
             editmodeContent.SetActive(false);
             viewmodeContent.SetActive(true);
+            LoadTraceInfo(trace);
         }
     }
 
     private void LoadTraceInfo(Trace selectedObjectTrace)
     {
-        if (selectedObjectTrace.name != "")
+        // Image should load from base54 string (adquired from database) and create a sprite with it. 
+        // For now the images are hard loaded in this script and referenced by id.
+        if (selectedObjectTrace.imageId == 1)
         {
-            // Image should load from base54 string (adquired from database) and create a sprite with it. 
-            // For now the images are hard loaded in this script and referenced by id.
-            if (selectedObjectTrace.imageId == 1)
-            {
-                image.sprite = bloodTraceImg;
-            }
-
-            if (selectedObjectTrace.imageId == 2)
-            {
-                image.sprite = fingerprintsTraceImg;
-            }
-
-            if (selectedObjectTrace.imageId == 3)
-            {
-                image.sprite = drugsTraceImg;
-            }
-
-            image.preserveAspect = true;
-
-            title.text = selectedObjectTrace.name;
-            description.text = selectedObjectTrace.description;
-            extraInfo.text = "Type: " + selectedObjectTrace.type + "\n" +
-                "Condition: " + selectedObjectTrace.condition + "\n" +
-                "Date Collected " + selectedObjectTrace.dateCollected + "\n" +
-                "From Case " + selectedObjectTrace.fromCase;
+            image.sprite = bloodTraceImg;
         }
+
+        if (selectedObjectTrace.imageId == 2)
+        {
+            image.sprite = fingerprintsTraceImg;
+        }
+
+        if (selectedObjectTrace.imageId == 3)
+        {
+            image.sprite = drugsTraceImg;
+        }
+
+        image.preserveAspect = true;
+
+        title.text = selectedObjectTrace.name;
+        description.text = selectedObjectTrace.description;
+        extraInfo.text = "Type: " + selectedObjectTrace.type + "\n" +
+            "Condition: " + selectedObjectTrace.condition + "\n" +
+            "Date Collected " + selectedObjectTrace.dateCollected + "\n" +
+            "From Case " + selectedObjectTrace.fromCase;
     }
 
     public void CloseTracesWindow()

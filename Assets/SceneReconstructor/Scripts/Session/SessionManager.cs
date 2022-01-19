@@ -84,7 +84,7 @@ public class SessionManager : MonoBehaviour
 
             Trace itemTrace = item.gameObject.GetComponent<ObjectFeatures>().GetTraceInfo();
 
-            if (itemTrace != null)
+            if (itemTrace.name != "")
             {
                 savableObject.trace = itemTrace;
             }
