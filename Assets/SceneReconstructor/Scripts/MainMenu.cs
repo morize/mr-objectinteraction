@@ -15,5 +15,5 @@ public class MainMenu : MonoBehaviour
     public static void SetModeLabel(string mode)
     {
         textMeshPro.text = "Case: Badjasmoord\nCurrent Mode: " + mode;
-    } 
+    }
 }

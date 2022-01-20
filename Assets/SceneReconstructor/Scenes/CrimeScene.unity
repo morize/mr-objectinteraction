@@ -13825,6 +13825,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tracesMenu: {fileID: 9151075289797482974}
+  instantiateMenu: {fileID: 941899675}
   isEditModeEnabled: 1
 --- !u!1 &1817075860
 GameObject:

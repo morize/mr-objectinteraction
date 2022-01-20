@@ -57,7 +57,7 @@ public class ObjectFeatures : MonoBehaviour
 
     private void OnObjectTriggered()
     {
-        if (objectMenu.isEditModeEnabled && !boundsControl.enabled)
+        if (ObjectMenu.isEditModeEnabled && !boundsControl.enabled)
         {
             boundsControl.enabled = true;
             objectMenu.AlignMenuWithObject(objectRenderer.bounds);

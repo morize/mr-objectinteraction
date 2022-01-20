@@ -29,9 +29,13 @@ public class InstantiateMenu : MonoBehaviour
 
     public void OpenListObjectsMenu()
     {
-        if (!gameObject.activeInHierarchy)
+        if (!gameObject.activeInHierarchy && ObjectMenu.isEditModeEnabled)
         {
             gameObject.SetActive(true);
         }
+    }
+    public void CloseInstantiateMenu()
+    {
+       gameObject.SetActive(false);
     }
 }

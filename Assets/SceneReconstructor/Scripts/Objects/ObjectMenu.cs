@@ -7,12 +7,14 @@ public class ObjectMenu : MonoBehaviour
 {
     [SerializeField]
     private TracesMenu tracesMenu;
+    [SerializeField]
+    private InstantiateMenu instantiateMenu;
 
     private InteractableToggleCollection objectMenu;
     private ObjectFeatures selectedObject;
     private GameObject hiddenButtons;
 
-    public bool isEditModeEnabled = true;
+    public static bool isEditModeEnabled = true;
 
     void Start()
     {
@@ -91,6 +93,7 @@ public class ObjectMenu : MonoBehaviour
         }
 
         if (tracesMenu.isActiveAndEnabled) tracesMenu.CloseTracesWindow();
+        if (instantiateMenu.isActiveAndEnabled) instantiateMenu.CloseInstantiateMenu();
 
         gameObject.SetActive(false);
     }
