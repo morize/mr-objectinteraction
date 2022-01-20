@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit.Input;
 
 [Serializable]
 public class Trace
@@ -37,13 +38,21 @@ public class SessionManager : MonoBehaviour
     public static Renderer floorRenderer;
 
     private string saveFile = "SavedCrimeScenes.json";
+    
     private BoundsControl boundsControl;
-    private ObjectManipulator objectManipulator;
+    private NearInteractionGrabbable nearInteractionGrabbable;
+    private ManipulationHandler manipulationHandler;
+
+    private GameObject loadableObjectsMenu;
+    private GameObject tracesMenu;
 
     void Start()
     {
         floorRenderer = transform.Find("Floor").GetComponent<Renderer>();
 
+        loadableObjectsMenu = transform.parent.Find("LoadableObjects Menu").gameObject;
+        tracesMenu = transform.parent.Find("TracesInformation Menu").gameObject;
+        
         AssignMrtkComponents();
         LoadObjectDataFromJson();
     }
@@ -51,32 +60,54 @@ public class SessionManager : MonoBehaviour
     private void AssignMrtkComponents()
     {
         gameObject.AddComponent<ConstraintManager>();
+
         boundsControl = gameObject.AddComponent<BoundsControl>();
         boundsControl.RotationHandlesConfig.ShowHandleForX = false;
         boundsControl.RotationHandlesConfig.ShowHandleForY = false;
         boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-        boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
+        boundsControl.ScaleHandlesConfig.ShowScaleHandles = true;
         boundsControl.enabled = false;
 
-        objectManipulator = gameObject.AddComponent<ObjectManipulator>();
-        objectManipulator.enabled = false;
+        manipulationHandler = gameObject.AddComponent<ManipulationHandler>();
+        manipulationHandler.OneHandRotationModeNear = ManipulationHandler.RotateInOneHandType.MaintainOriginalRotation;
+        manipulationHandler.OneHandRotationModeFar = ManipulationHandler.RotateInOneHandType.MaintainOriginalRotation;
+        manipulationHandler.OnManipulationEnded.AddListener(UpdateWindowPositions);
+        manipulationHandler.enabled = false;
+
+        nearInteractionGrabbable = gameObject.AddComponent<NearInteractionGrabbable>();
+        nearInteractionGrabbable.enabled = false;
     }
+
+    private void UpdateWindowPositions(ManipulationEventData ev)
+    {
+        if (loadableObjectsMenu.activeInHierarchy)
+        {
+            loadableObjectsMenu.transform.position = new Vector3(floorRenderer.bounds.max.x - 0.6f, floorRenderer.bounds.max.y + 0.6f, floorRenderer.bounds.min.z - 0.6f);
+        }
+
+        if (tracesMenu.activeInHierarchy)
+        {
+            tracesMenu.transform.position = new Vector3(floorRenderer.bounds.min.x + 0.6f, floorRenderer.bounds.max.y + 0.6f, floorRenderer.bounds.max.z + 0.6f);
+        }
+    }
+
+ 
 
     public void ToggleSceneMovement()
     {
         if (!boundsControl.isActiveAndEnabled)
         {
-            boundsControl.ScaleHandlesConfig.ShowScaleHandles = true;
             boundsControl.enabled = true;
 
-            objectManipulator.enabled = true;
+            manipulationHandler.enabled = true;
+            nearInteractionGrabbable.enabled = true;
         }
         else
         {
-            boundsControl.ScaleHandlesConfig.ShowScaleHandles = false;
             boundsControl.enabled = false;
 
-            objectManipulator.enabled = false;
+            manipulationHandler.enabled = false;
+            nearInteractionGrabbable.enabled = false;
         }
     }
 

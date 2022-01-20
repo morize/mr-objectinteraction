@@ -98,7 +98,8 @@ public class ObjectMenu : MonoBehaviour
     public void ToggleEditMode()
     {
         ResetEnvironment();
-
+        string mode = !isEditModeEnabled ? "Edit Mode" : "View Only Mode";
+        MainMenu.SetModeLabel(mode);
         isEditModeEnabled = !isEditModeEnabled;
     }
 
