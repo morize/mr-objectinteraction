@@ -20,6 +20,7 @@ public class ObjectMenu : MonoBehaviour
     {
         objectMenu = gameObject.GetComponent<InteractableToggleCollection>();
         hiddenButtons = gameObject.transform.Find("Object Hidden Buttons").gameObject;
+        objectMenu.OnSelectionEvents.AddListener(OnTracesInfoButtonFocusOff);
     }
 
     public void OnObjectTriggered(ObjectFeatures incomingObject)
@@ -61,6 +62,11 @@ public class ObjectMenu : MonoBehaviour
     public void OnTracesInfoButtonPressed()
     {
         tracesMenu.LoadTrace(isEditModeEnabled, selectedObject.GetTraceInfo());
+    }
+
+    public void OnTracesInfoButtonFocusOff()
+    {
+        if (tracesMenu.isActiveAndEnabled && objectMenu.CurrentIndex != 4) tracesMenu.CloseTracesWindow();
     }
 
     public void OnDeleteButtonPressed()
@@ -109,6 +115,7 @@ public class ObjectMenu : MonoBehaviour
     public void SetTraceToSelectedObject(string trace)
     {
         Trace newTrace = tracesMenu.GenerateTraceInfo(trace);
+        tracesMenu.SetAssignedTraceText(newTrace);
         selectedObject.SetTraceInfo(newTrace);
     }
 }

@@ -14,10 +14,10 @@ public class TracesMenu : MonoBehaviour
     public TextMeshProUGUI title;
     public TextMeshProUGUI description;
 
-    [SerializeField]
     public GameObject viewmodeContent;
     public GameObject editmodeContent;
 
+    public TextMeshPro assignedTraceText;
 
     public void LoadTrace(bool isEditModeEnabled, Trace trace)
     {
@@ -26,6 +26,7 @@ public class TracesMenu : MonoBehaviour
             gameObject.SetActive(true);
             viewmodeContent.SetActive(false);
             editmodeContent.SetActive(true);
+            SetAssignedTraceText(trace);
         }
 
         if(!isEditModeEnabled && trace.name != "")
@@ -64,6 +65,12 @@ public class TracesMenu : MonoBehaviour
             "Condition: " + selectedObjectTrace.condition + "\n" +
             "Date Collected " + selectedObjectTrace.dateCollected + "\n" +
             "From Case " + selectedObjectTrace.fromCase;
+    }
+
+    public void SetAssignedTraceText(Trace trace)
+    {
+        string traceName = trace.name != null ? "Assigned Trace: \n" + trace.name : "Assigned Trace: \nNone";
+        assignedTraceText.text = traceName;
     }
 
     public void CloseTracesWindow()

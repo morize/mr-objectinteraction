@@ -16,6 +16,7 @@ public static class InstantiateManager
     {
         Addressables.InstantiateAsync(objectPath + objectName + ".prefab", parent).Completed += (res) => {
             res.Result.name = objectName;
+            res.Result.transform.position = new Vector3(parent.transform.position.x, parent.transform.position.y - 0.35f, parent.transform.position.z);
         };
     }
 

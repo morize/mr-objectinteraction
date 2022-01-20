@@ -79,19 +79,10 @@ public class SessionManager : MonoBehaviour
     }
 
     private void UpdateWindowPositions(ManipulationEventData ev)
-    {
-        if (loadableObjectsMenu.activeInHierarchy)
-        {
-            loadableObjectsMenu.transform.position = new Vector3(floorRenderer.bounds.max.x - 0.6f, floorRenderer.bounds.max.y + 0.6f, floorRenderer.bounds.min.z - 0.6f);
-        }
-
-        if (tracesMenu.activeInHierarchy)
-        {
-            tracesMenu.transform.position = new Vector3(floorRenderer.bounds.min.x + 0.6f, floorRenderer.bounds.max.y + 0.6f, floorRenderer.bounds.max.z + 0.6f);
-        }
+    {   
+        loadableObjectsMenu.transform.position = new Vector3(floorRenderer.bounds.max.x - 0.6f, floorRenderer.bounds.max.y + 0.6f, floorRenderer.bounds.min.z - 0.6f);
+        tracesMenu.transform.position = new Vector3(floorRenderer.bounds.min.x + 0.6f, floorRenderer.bounds.max.y + 0.6f, floorRenderer.bounds.max.z + 0.6f);   
     }
-
- 
 
     public void ToggleSceneMovement()
     {
